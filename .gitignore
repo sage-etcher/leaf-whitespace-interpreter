@@ -1,0 +1,6 @@
+.git/**
+.vscode/**
+build/**
+src/include/**
+src/lib/**
+ws_examples/*.txt

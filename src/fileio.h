@@ -5,11 +5,14 @@
 #ifndef _FILEIO_H_
 #define _FILEIO_H_
 
+
+/* libraries */
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 
+/* function prototypes */
 char *fio_file_contents (char *file_name);
+
 
 #endif

@@ -3,7 +3,7 @@
 #pragma once
 /* legacy backup solution */
 #ifndef _CONFIG_H_
-#define _CONFIG_N_
+#define _CONFIG_H_
 
 /* CONFIG.H START editting */
 /* edit bellow this point */
@@ -16,4 +16,5 @@
 
 /* edit above this point */
 /* CONFIG STOP ediiting */
+
 #endif

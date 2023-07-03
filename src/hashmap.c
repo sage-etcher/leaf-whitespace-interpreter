@@ -1,5 +1,6 @@
 #include "hashmap.h"
 
+/* libraries */
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>

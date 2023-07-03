@@ -1,23 +1,67 @@
 /* only run once */
-/* modern */
+/* modern solution */
 #pragma once
-/* legacy backup */
-#ifndef _WSI_H_
-#define _WSI_H_
+/* legacy backup solution */
+#ifndef _WSPROGRAM_H_
+#define _WSPROGRAM_H_
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stddef.h>
-#include <math.h>
-
-#include "fileio.h"
-#include "utils.h"
-#include "whitespace.h"
+/* configuration file */
 #include "config.h"
-#include "wserr.h"
+
+/* include headers */
+#include "ws_errors.h"
 #include "hashmap.h"
+
+/* include libraries */
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+
+/* constants */
+#define WS_MAX_INST_LEN 4
+
+/* enum of whitespace instruction indexes */
+/* works for WS_INST and ffor WS_INST_NAME */
+typedef enum
+{
+    WS_PUSH,
+    WS_DUP,
+    WS_COPY,
+    WS_SWAP,
+    WS_POP,
+    WS_SLIDE,
+    WS_ADD,
+    WS_SUB,
+    WS_MULT,
+    WS_DIV,
+    WS_MOD,
+    WS_STORE,
+    WS_RESTORE,
+    WS_LABEL,
+    WS_CALL,
+    WS_JMP,
+    WS_JZ,
+    WS_JN,
+    WS_RET,
+    WS_END,
+    WS_PUTC,
+    WS_PUTI,
+    WS_READC,
+    WS_READI,
+    WS_DPRINT,
+    WS_INST_COUNT
+} WS_INST_INDEX;
+
+typedef struct
+{
+    WS_INST_INDEX index;
+    char *inst_name;
+    char *inst_string;
+    size_t inst_string_len;
+    bool takes_parameter;
+} wsInstDefinition;
 
 /* typedefinition for default int size for whitespace script */
 typedef int32_t wsInt;
@@ -31,7 +75,6 @@ typedef struct
     uint64_t line_pos;
     uint64_t char_pos;
 } wsInstruction;
-
 
 /* program container */
 typedef struct
@@ -59,16 +102,11 @@ typedef struct
 } wsProgram;
 
 
-/* helper functions */
+/* global variables */
+extern wsInstDefinition WS_INST[];
 
-wsError get_parameter (char *file_contents, uint64_t *file_cursor, wsInt *return_address);
-/* wsInt get_parameter (char *file_contents, uint64_t *program_counter); */
-wsError interpret_file (char *file_contents, wsProgram *program);
-void inc_cursor_position (char character);
-void log_error (wsError error_code, char *instruction, uint64_t line_num, uint64_t char_num);
-void print_stack (wsInt stack[], wsInt stack_index);
-void free_wsProgram (wsProgram *program);
 
+/* function prototypes */
 /* whitespace instruction set */
 wsError wsi_push           (wsProgram *program);
 wsError wsi_dup            (wsProgram *program);
@@ -94,5 +132,11 @@ wsError wsi_putc           (wsProgram *program);
 wsError wsi_puti           (wsProgram *program);
 wsError wsi_readc          (wsProgram *program);
 wsError wsi_readi          (wsProgram *program);
+
+/* debug functions */
+void print_stack (wsInt stack[], wsInt stack_index);
+
+/* frees wsProgram variable */
+void free_wsProgram (wsProgram *program);
 
 #endif

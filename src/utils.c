@@ -1,10 +1,17 @@
 #include "utils.h"
 
+/* libraries */
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
 
+
+/* functions */
 int util_from_binary (const char *s)
 {
     return (int) strtol (s, NULL, 2);
 }
+
 
 /* gets number of place values a number of base n has */
 /* for example: (int)255 in base 10 has 3 places, while if negative it would have 4.*/

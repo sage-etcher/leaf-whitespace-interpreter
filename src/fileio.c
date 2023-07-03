@@ -1,14 +1,15 @@
-#include "fileio.h" 
+#include "fileio.h"
 
+/* libraries */
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 
+/* functions */
 char *fio_file_contents (char *file_name)
 {
     char *buffer = NULL;
-    long length; 
+    long length;
     FILE *f = fopen (file_name, "rb");
 
     if (f == NULL)
