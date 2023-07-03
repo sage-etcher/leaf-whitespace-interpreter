@@ -21,8 +21,7 @@ enum WS_ERRCODE
     WS_ERR_RETURNFROMMAIN,
     WS_ERR_ENDOFFILE,
     WS_ERR_BADINSTRUCTION,
-    WS_ERR_NOMATCH,
-    WS_ERR_BADPARAM
+    WS_ERR_NOMATCH
 };
 
 const char *WS_ERRSTR[] =
@@ -36,8 +35,7 @@ const char *WS_ERRSTR[] =
     "return from main processes",
     "end of file reached. no END statement (LLL)",
     "bad instruction",
-    "couldn't find a match for that key",
-    "there was an issue getting the provided parameter"
+    "couldn't find a match for that key"
 };
 
 

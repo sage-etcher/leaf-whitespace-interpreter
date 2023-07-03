@@ -18,7 +18,7 @@
 typedef struct
 {
     char *key;
-    uintmax_t key_size;
+    uintmax_t key_len;
 
     void *value;
     size_t value_size;
@@ -27,7 +27,7 @@ typedef struct
 typedef struct
 {
     keyValuePair **item_list;
-    uintmax_t size;
+    uintmax_t alloc_len;
     uintmax_t count;
 } hashMap;
 

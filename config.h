@@ -11,7 +11,6 @@
 /* how many elements can be in the stack */
 #define STACK_LEN 255
 
-/* max binary length 1-255*/
 #define MAX_PARAM_LEN 32
 
 /* edit above this point */
