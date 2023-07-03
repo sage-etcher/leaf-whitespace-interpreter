@@ -34,7 +34,7 @@ int main (int argc, char **argv)
     wsProgram program;
 
     /* store error code */
-    wsError error_code;  
+    wsError error_code;
 
 
     /* process console arguements, get file name */
@@ -56,11 +56,11 @@ int main (int argc, char **argv)
         exit (EXIT_FAILURE);
     }
 
-   
+
     /* interpret program into an easier to work with format */
     error_code = interpret_file (file_contents, &program);
     /* file_contents is no longer needed, so we free it */
-    free (file_contents);    
+    free (file_contents);
     /* check if interpret_file ran correctly */
     if (error_code != WS_SUCCESS)
     {
@@ -73,7 +73,7 @@ int main (int argc, char **argv)
     printf ("program interpretted correctly \n");
 
     /* exit gracefully */
-    /* free allocated memory */ 
+    /* free allocated memory */
     free_wsProgram (&program);
 
     /* send a newline statement to fix linux being mean */
@@ -85,12 +85,23 @@ int main (int argc, char **argv)
 
 
 /* helper functions */
-wsInt get_parameter (char *file_contents, uint64_t *file_cursor)
+void inc_cursor_position (char character)
+{
+    g_char_pos++;
+    if (character == '\n')
+    {
+        g_char_pos = 1;
+        g_line_pos++;
+    }
+}
+
+wsError get_parameter (char *file_contents, uint64_t *file_cursor, wsInt *return_address)
 {
     char current_char;
     char binary_string[MAX_PARAM_LEN];
     const int8_t binary_string_len = MAX_PARAM_LEN;
     int8_t binary_string_count = 0;
+    wsError err_code = WS_SUCCESS;
 
     /* set binary string as all zeroes */
     memset (binary_string, 0, binary_string_len * sizeof (binary_string[0]));
@@ -99,7 +110,7 @@ wsInt get_parameter (char *file_contents, uint64_t *file_cursor)
     current_char = file_contents[*file_cursor];
 
     /* loop through characters until you get to end of file or end of number */
-    while (current_char != '\0' && current_char != '\n')
+    while (current_char != '\n')
     {
         /* set current_char */
         current_char = file_contents[*file_cursor];
@@ -108,6 +119,12 @@ wsInt get_parameter (char *file_contents, uint64_t *file_cursor)
 
         /* get line number and char in line for error logging */
         inc_cursor_position (current_char);
+
+        if (current_char == '\0')
+        {
+            err_code = WS_ERR_BADPARAM;
+            break;
+        }
 
         /* if not white space return to top of loop */
         /* if character isn't whitespace, early loop back */
@@ -139,8 +156,19 @@ wsInt get_parameter (char *file_contents, uint64_t *file_cursor)
     } /* end while loop */
 
 
-    /* convert the string to binary and return the integer result */
-    return util_from_binary (binary_string);
+    if (binary_string_count == 0)
+    {
+        err_code = WS_ERR_BADPARAM;
+    }
+
+    /* check that there was a value given */
+    if (err_code == WS_SUCCESS)
+    {
+        /* convert the string to binary and return the integer result */
+        *return_address = util_from_binary (binary_string);
+    }
+
+    return err_code;
 }
 
 wsError interpret_file (char *file_contents, wsProgram *program)
@@ -151,7 +179,7 @@ wsError interpret_file (char *file_contents, wsProgram *program)
 
     /* instruction string */
     char *instruction_str;
-    uint8_t instruction_len = WS_MAX_INST_LEN;
+    uint8_t instruction_size = WS_MAX_INST_LEN;
     uint8_t instruction_count = 0;
 
     /* storage container for the current instruction we are compareing */
@@ -170,20 +198,16 @@ wsError interpret_file (char *file_contents, wsProgram *program)
 
 
     /* allocate program_list */
-    program->list_count = 0;
-    program->list_len = 1;
-    program->instruction_list = malloc (program->list_len * sizeof (wsInstruction *));
+    program->count = 0;
+    program->size = 2;
+    program->instructions = malloc (program->size * sizeof (wsInstruction));
+    assert (program->instructions != NULL);
 
-
-    printf ("here\n");
     /* allocate instructin string */
-    instruction_str = malloc ((instruction_len + 1) * sizeof (char));  
-    printf ("here\n");
+    instruction_str = malloc ((instruction_size + 1) * sizeof (char));
+    assert (instruction_str != NULL);
     /* set instruction_str to all 0s */
-    /* memcpy (instruction_str, NULL, instruction_len * sizeof (char));
-
-    printf ("here\n");
-
+    memset (instruction_str, 0, instruction_size * sizeof (instruction_str[0]));
 
     /* set instruction pos flag to default to update on first run */
     instruction_pos_flag = true;
@@ -199,19 +223,9 @@ wsError interpret_file (char *file_contents, wsProgram *program)
         /* update file location information (for error logging) */
         inc_cursor_position (cur_char);
 
-        /* proccess out comments */
-        if (cur_char != ' '  ||
-            cur_char != '\t' ||
-            cur_char != '\n' )
-        {
-            /* if the cursor char isn't a white space caracter 
-             * loop back to the start of the loop */
-            continue;
-        }
-
         /* if there was an instruction ran on last run, update instructin pos
          * variables, only update for whitespace characters. */
-        if (instruction_pos_flag)
+        if (instruction_pos_flag && syntax_err_code == WS_SUCCESS)
         {
             /* update instruction positional variables */
             instruction_line_pos = g_line_pos;
@@ -221,20 +235,45 @@ wsError interpret_file (char *file_contents, wsProgram *program)
             instruction_pos_flag = false;
         }
 
-        /* check if the instructon length in about to overflow */
-        if (instruction_count == instruction_len)
+        /* check if the instructon string is about to overflow */
+        /* or if end of file reached while in the middle of an instruction */
+        if (instruction_count == instruction_size ||
+            (cur_char == '\0' && instruction_count != 0))
         {
+            syntax_err_code = WS_ERR_BADINSTRUCTION;
+        }
+
+
+        /* if an error shows up, do stuff with it, cause we dont want that here */
+        if (syntax_err_code != WS_SUCCESS)
+        {
+            /* printf ("bad instruction\n%d, %d", instruction_count, instruction_size); */
             /* set global file possitioning to the start of error */
             g_char_pos = instruction_char_pos;
             g_line_pos = instruction_line_pos;
-
-            /* set error code */
-            syntax_err_code = WS_ERR_BADINSTRUCTION;
 
             /* tell the loop to exit */
             runtime = false;
             continue;
         }
+
+        /* check to make sure that we arent at the end of the file */
+        if (cur_char == '\0')
+        {
+            runtime = false;
+            continue;
+        }
+
+        /* proccess out comments */
+        if (cur_char != ' '  &&
+            cur_char != '\t' &&
+            cur_char != '\n' )
+        {
+            /* if the cursor char isn't a white space caracter
+             * loop back to the start of the loop */
+            continue;
+        }
+
 
         /* add current character to the instruction_str */
         instruction_str[instruction_count] = cur_char;
@@ -242,54 +281,55 @@ wsError interpret_file (char *file_contents, wsProgram *program)
 
         /* check instruction to see if it matches a known instruction */
         /* loop through all instructions, starting from the top */
-        for (inst_check = WS_INST_COUNT - 1; inst_check >= 0; inst_check--)
+        for (inst_check = 0; inst_check < WS_INST_COUNT; inst_check++)
         {
             /* check if instruction_str matches a known instruction */
-            if (strncmp (instruction_str, 
-                         WS_INST[inst_check].inst_string, 
+            if (strncmp (instruction_str,
+                         WS_INST[inst_check].inst_string,
                          WS_INST[inst_check].inst_string_len) != 0)
             {
-                /* if instruction doesnt match inst_check, return to 
+                /* if instruction doesnt match inst_check, return to
                  * the top of the loop */
                 continue;
             }
 
             /* if program_list runs out of allocated length, extend it */
-            if (program->list_count == program->list_len)
+            if (program->count == program->size)
             {
-                /* double the allocated length, and realloc the list */
-                program->list_len *= 2;
-                program->instruction_list = realloc (program->instruction_list, program->list_len * sizeof (wsInstruction *));
-                assert (program->instruction_list != NULL);
+                program->size *= 2;
+                program->instructions = realloc (program->instructions, program->size * sizeof (wsInstruction));
             }
 
-            /* allocate a new instruction */
-            program->instruction_list[program->list_count] = malloc (sizeof (wsInstruction));
-
             /* set the instruction type */
-            program->instruction_list[program->list_count]->instruction = inst_check;
+            program->instructions[program->count].instruction = inst_check;
             /* set the instruction start position */
-            program->instruction_list[program->list_count]->char_pos = instruction_char_pos;
-            program->instruction_list[program->list_count]->line_pos = instruction_line_pos;
+            program->instructions[program->count].char_pos = instruction_char_pos;
+            program->instructions[program->count].line_pos = instruction_line_pos;
 
             /* if the instruction takes a parameter, get it */
             if (WS_INST[inst_check].takes_parameter)
             {
-                /* otherwise, if the instruction does take a paramter, get it */ 
+                /* otherwise, if the instruction does take a paramter, get it */
                 /* get a paramter and set it */
-                program->instruction_list[program->list_count]->parameter = get_parameter ( 
-                    file_contents, &cur_pos);
+                syntax_err_code = get_parameter (file_contents,
+                                                 &cur_pos,
+                                                 &program->instructions[program->count].parameter);
             }
+
+            /* increment count */
+            program->count++;
+
+            /* log that a command was just run */
+            instruction_pos_flag = true;
 
             /* reset the instruction */
             instruction_count = 0;
-            /* memcpy (instruction_str, 0, instruction_len); */
-            
+            memset (instruction_str, 0, instruction_size * sizeof (instruction_str[0]));
+
             /* stop checking for instruction_str having a match */
             break;
-        } 
+        }
     }
-
 
     /* exit gracefully */
     /* free unneeded memory */
@@ -297,6 +337,27 @@ wsError interpret_file (char *file_contents, wsProgram *program)
 
     /* return error code */
     return syntax_err_code;
+}
+
+void log_error (wsError error_code, char *instruction, uint63_t line_num, uint64_t char_num)
+{
+    printf ("\n\nerror #%llu : L%llu C%llu : %s \"%s\"\n", error_code, line_num, char_num, instruction, WS_ERRSTR[error_code]);
+}
+
+wsError run_program (wsProgram *program)
+{
+
+}
+
+void free_wsProgram (wsProgram *program)
+{
+    uint64_t i = 0;
+
+    /* free the hashMpa*/
+    free_hashMap (program->heap);
+
+    /* free the instruction set */
+    free (program->instructions);
 }
 
 void print_stack (wsInt stack[], wsInt stack_index)
@@ -313,66 +374,37 @@ void print_stack (wsInt stack[], wsInt stack_index)
     return;
 }
 
-void log_error (wsError error_code, char *instruction, uint64_t line_num, uint64_t char_num)
-{
-    printf ("\n\nerror #%llu : L%llu C%llu : %s \"%s\"\n", error_code, line_num, char_num, instruction, WS_ERRSTR[error_code]);
-}
-
-void inc_cursor_position (char character)
-{
-    g_char_pos++;
-    if (character == '\n')
-    {
-        g_char_pos = 1;
-        g_line_pos++;
-    }
-}
-
-void free_wsProgram (wsProgram *program)
-{
-    uint64_t i = 0;
-
-    /* free the hashMpa*/
-    free_hashMap (program->heap);
-
-    /* free each instruction */
-    for (; i < program->list_count; i++)
-        free (program->instruction_list[i]);
-
-    /* free the instruction set */
-    free (program->instruction_list);
-}
-
-
 
 /* whitespace instructions */
-wsError wsi_push (wsInt stack[], wsInt *stack_index, char *file_contents, uint64_t *program_counter)
+wsError wsi_push (wsProgram *program)
 {
-    wsInt new_value;
+    /* cannot add item to stack if stack is full */
+    if (program->stack_index >= STACK_LEN) return WS_ERR_FULLSTACK;
 
-    /* guard clauses */
-    if ((*stack_index) >= STACK_LEN) return WS_ERR_FULLSTACK;
+    /* add an element to the top of the stack */
+    program->stack[program->stack_index] = program->current_instruction->parameter;
+    program->stack_index++;
 
-    new_value = get_parameter (file_contents, program_counter);
-    stack[(*stack_index)] = new_value;
-    (*stack_index)++;
-
+    /* return successfully */
     return WS_SUCCESS;
 }
 
-wsError wsi_dup (wsInt stack[], wsInt *stack_index)
+wsError wsi_dup (wsProgram *program)
 {
-    /* guard clauses */
-    if ((*stack_index) == 0) return WS_ERR_EMPTYSTACK;
-    else if ((*stack_index) >= STACK_LEN) return WS_ERR_FULLSTACK;
+    /* stack must have atleast 1 element */
+    if (program->stack_index >= 1) return WS_ERR_TOOFEWITEMS;
+    /* cannot duplicate item on stack if stack is full */
+    else if (program->stack_index >= STACK_LEN) return WS_ERR_FULLSTACK;
 
-    stack[(*stack_index)] = stack[(*stack_index) - 1];
-    (*stack_index)++;
+    /* duplicate the top element on the stack */
+    program->stack[program->stack_index] = program->stack[program->stack_index - 1];
+    program->stack_index++;
 
+    /* return successfully */
     return WS_SUCCESS;
 }
 
-wsError wsi_copy (wsInt stack[], wsInt *stack_index, char *file_contents, uint64_t *program_counter)
+wsError wsi_copy (wsProgram *program)
 {
     wsInt copy_index;
 
@@ -380,7 +412,7 @@ wsError wsi_copy (wsInt stack[], wsInt *stack_index, char *file_contents, uint64
     if ((*stack_index) == 0) return WS_ERR_EMPTYSTACK;
     else if ((*stack_index) >= STACK_LEN) return WS_ERR_FULLSTACK;
 
-    copy_index = get_parameter (file_contents, program_counter);
+    /* copy_index = get_parameter (file_contents, program_counter); */
 
     /* check if index is out of range */
     if ( copy_index >= (*stack_index) || copy_index < 0 ) return WS_ERR_OUTOFRANGE;
@@ -391,7 +423,7 @@ wsError wsi_copy (wsInt stack[], wsInt *stack_index, char *file_contents, uint64
     return WS_SUCCESS;
 }
 
-wsError wsi_swap (wsInt stack[], wsInt *stack_index)
+wsError wsi_swap (wsProgram *program)
 {
     wsInt item_overhead;
 
@@ -405,7 +437,7 @@ wsError wsi_swap (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_pop (wsInt *stack_index)
+wsError wsi_pop (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) <= 0) return WS_ERR_EMPTYSTACK;
@@ -415,14 +447,14 @@ wsError wsi_pop (wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_slide (wsInt stack[], wsInt *stack_index, char *file_contents, uint64_t *program_counter)
+wsError wsi_slide (wsProgram *program)
 {
     wsInt slide_n;
 
     /* guard clauses */
     if ((*stack_index) <= 0) return WS_ERR_EMPTYSTACK;
 
-    slide_n = get_parameter (file_contents, program_counter);
+    /* slide_n = get_parameter (file_contents, program_counter); */
 
     /* check that slide_n is valid */
     if (slide_n < 0 || slide_n >= (*stack_index)) return WS_ERR_OUTOFRANGE;
@@ -433,7 +465,7 @@ wsError wsi_slide (wsInt stack[], wsInt *stack_index, char *file_contents, uint6
     return WS_SUCCESS;
 }
 
-wsError wsi_add (wsInt stack[], wsInt *stack_index)
+wsError wsi_add (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) < 2) return WS_ERR_TOOFEWITEMS;
@@ -444,7 +476,7 @@ wsError wsi_add (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_sub (wsInt stack[], wsInt *stack_index)
+wsError wsi_sub (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) < 2) return WS_ERR_TOOFEWITEMS;
@@ -455,7 +487,7 @@ wsError wsi_sub (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_mult (wsInt stack[], wsInt *stack_index)
+wsError wsi_mult (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) < 2) return WS_ERR_TOOFEWITEMS;
@@ -466,7 +498,7 @@ wsError wsi_mult (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_idiv (wsInt stack[], wsInt *stack_index)
+wsError wsi_idiv (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) < 2) return WS_ERR_TOOFEWITEMS;
@@ -477,7 +509,7 @@ wsError wsi_idiv (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_mod (wsInt stack[], wsInt *stack_index)
+wsError wsi_mod (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) < 2) return WS_ERR_TOOFEWITEMS;
@@ -488,7 +520,7 @@ wsError wsi_mod (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_store (wsInt stack[], wsInt *stack_index, hashMap *heap)
+wsError wsi_store (wsProgram *program)
 {
     wsInt value;
     wsInt key_int;
@@ -518,7 +550,7 @@ wsError wsi_store (wsInt stack[], wsInt *stack_index, hashMap *heap)
     return WS_SUCCESS;
 }
 
-wsError wsi_restore (wsInt stack[], wsInt *stack_index, hashMap *heap)
+wsError wsi_restore (wsProgram *program)
 {
     wsInt value;
     wsInt key_int;
@@ -550,35 +582,35 @@ wsError wsi_restore (wsInt stack[], wsInt *stack_index, hashMap *heap)
 
 /* not implemented start */
 /* need to figure out how to get labels to work */
-wsError wsi_label (wsInt stack[], wsInt *stack_index, char *file_contents, uint64_t *program_counter)
+wsError wsi_label (wsProgram *program)
 {
     printf ("labels and calls are not yet implemented\n");
 
     return WS_SUCCESS;
 }
 
-wsError wsi_call (wsInt stack[], wsInt *stack_index, char *file_contents, uint64_t *program_counter)
+wsError wsi_call (wsProgram *program)
 {
     printf ("labels and calls are not yet implemented\n");
 
     return WS_SUCCESS;
 }
 
-wsError wsi_jump (wsInt stack[], wsInt *stack_index, char *file_contents, uint64_t *program_counter)
+wsError wsi_jump (wsProgram *program)
 {
     printf ("labels and calls are not yet implemented\n");
 
     return WS_SUCCESS;
 }
 
-wsError wsi_jump_zero (wsInt stack[], wsInt *stack_index, char *file_contents, uint64_t *program_counter)
+wsError wsi_jump_zero (wsProgram *program)
 {
     printf ("labels and calls are not yet implemented\n");
 
     return WS_SUCCESS;
 }
 
-wsError wsi_jump_negative (wsInt stack[], wsInt *stack_index, char *file_contents, uint64_t *program_counter)
+wsError wsi_jump_negative (wsProgram *program)
 {
     printf ("labels and calls are not yet implemented\n");
 
@@ -586,7 +618,7 @@ wsError wsi_jump_negative (wsInt stack[], wsInt *stack_index, char *file_content
 }
 /* not implemented end */
 
-wsError wsi_ret (uint64_t *program_counter_index)
+wsError wsi_ret (wsProgram *program)
 {
     /* guard clause */
     if ((*program_counter_index) <= 0) return WS_ERR_RETURNFROMMAIN;
@@ -596,14 +628,14 @@ wsError wsi_ret (uint64_t *program_counter_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_end (bool *runtime_bool)
+wsError wsi_end (wsProgram *program)
 {
     (*runtime_bool) = false;
 
     return WS_SUCCESS;
 }
 
-wsError wsi_putc (wsInt stack[], wsInt *stack_index)
+wsError wsi_putc (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) <= 0) return WS_ERR_TOOFEWITEMS;
@@ -614,7 +646,7 @@ wsError wsi_putc (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_puti (wsInt stack[], wsInt *stack_index)
+wsError wsi_puti (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) <= 0) return WS_ERR_TOOFEWITEMS;
@@ -625,7 +657,7 @@ wsError wsi_puti (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_readc (wsInt stack[], wsInt *stack_index)
+wsError wsi_readc (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) >= STACK_LEN) return WS_ERR_FULLSTACK;
@@ -636,7 +668,7 @@ wsError wsi_readc (wsInt stack[], wsInt *stack_index)
     return WS_SUCCESS;
 }
 
-wsError wsi_readi (wsInt stack[], wsInt *stack_index)
+wsError wsi_readi (wsProgram *program)
 {
     /* guard clauses */
     if ((*stack_index) >= STACK_LEN) return WS_ERR_FULLSTACK;

@@ -24,15 +24,15 @@ keyValuePair *new_keyValuePair (char *key, void *value, size_t value_size)
 
     /* assign the Pair's Key */
     /* get key string length */
-    new_pair->key_len = strlen (key);
+    new_pair->key_size = strlen (key);
 
     /* allocate and copy key over to new_pair.key */
     /* add 1s are to account for null characters in conversion from starting count at 0 vs 1 */
-    new_pair->key = (char *)malloc ((new_pair->key_len + 1) * sizeof (char));
+    new_pair->key = (char *)malloc ((new_pair->key_size + 1) * sizeof (char));
     assert (new_pair->key != NULL);
-    memcpy (new_pair->key, key, (new_pair->key_len + 1) * sizeof (char));
+    memcpy (new_pair->key, key, (new_pair->key_size + 1) * sizeof (char));
     /* backup, incase source "key" was not null terminated, add a null terminator */
-    new_pair->key[new_pair->key_len] = '\0';
+    new_pair->key[new_pair->key_size] = '\0';
 
     /* assigne the Pair's Value */
     /* copy value_size to new_pair */
@@ -75,11 +75,11 @@ hashMap *new_hashMap (void)
     new_hash = (hashMap *)malloc (sizeof (hashMap));
 
     /* set starting size information */
-    new_hash->alloc_len = 2;
+    new_hash->size = 2;
     new_hash->count = 0;
 
     /* allocate items */
-    new_hash->item_list = (keyValuePair **)malloc (new_hash->alloc_len * sizeof (keyValuePair *));
+    new_hash->item_list = (keyValuePair **)malloc (new_hash->size * sizeof (keyValuePair *));
     assert (new_hash->item_list != NULL);
 
     return new_hash;
@@ -115,8 +115,8 @@ void hash_extend (hashMap *hash_map)
     assert (hash_map->item_list != NULL);
 
     /* double the allocated length, and realloc the list */
-    hash_map->alloc_len *= 2;
-    hash_map->item_list = realloc (hash_map->item_list, hash_map->alloc_len * sizeof (keyValuePair));
+    hash_map->size *= 2;
+    hash_map->item_list = realloc (hash_map->item_list, hash_map->size * sizeof (keyValuePair));
 }
 
 /* append a new item to the end of a hashmap*/
@@ -130,14 +130,14 @@ void hash_append (hashMap *hash_map, char *key, void *value, size_t value_size)
     assert (hash_map->item_list != NULL);
     assert (key != NULL);
     assert (value != NULL);
-    /* YELL VIOLENTLY if the alloc_len is 0, DONT WORK WITH IT, JUST CEASE */
-    assert (hash_map->alloc_len != 0);
+    /* YELL VIOLENTLY if the size is 0, DONT WORK WITH IT, JUST CEASE */
+    assert (hash_map->size != 0);
 
 
     /* first, see if their is enough allocated space for new item */
     /* incase user touches count (NOT ADVISED), keep extending until adequately sized */
-    /* also dont run, if alloc_len is 0, otherwise youll enter an infinate loop */
-    while (hash_map->count >= hash_map->alloc_len && hash_map->alloc_len != 0)
+    /* also dont run, if size is 0, otherwise youll enter an infinate loop */
+    while (hash_map->count >= hash_map->size && hash_map->size != 0)
         hash_extend (hash_map);
 
     /* next, create a new keyValuePair */
@@ -176,7 +176,7 @@ bool hash_search_index (hashMap *hash_map, char *key, void *return_index)
 {
     uintmax_t i = 0;
     keyValuePair *item;
-    uintmax_t key_len = strlen (key);
+    uintmax_t key_size = strlen (key);
     bool match_found = false;
 
     /* function parameter guard clauses */
@@ -198,7 +198,7 @@ bool hash_search_index (hashMap *hash_map, char *key, void *return_index)
 
         /* compare the item's key and the param key */
         /* if the keys match, set return variables to adequate values */
-        if (strncmp (item->key, key, HASHMAP_MAX(item->key_len, key_len)) == 0)
+        if (strncmp (item->key, key, HASHMAP_MAX(item->key_size, key_size)) == 0)
         {
             /* set return bool to true, showing we found a match */
             match_found = true;
