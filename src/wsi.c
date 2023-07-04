@@ -89,7 +89,6 @@ int main (int argc, char **argv)
     /* check if interpret_file ran correctly */
     if (error_code != WS_SUCCESS)
     {
-        log_error (error_code, "", g_line_pos, g_char_pos);
         free_wsProgram (&program);
         exit (error_code);
     }
@@ -196,7 +195,6 @@ static wsError get_parameter (char *file_contents, uint64_t *file_cursor, wsInt 
         /* convert the string to binary and return the integer result */
         *return_address = util_from_binary (binary_string);
     }
-
     return err_code;
 }
 
@@ -379,7 +377,7 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
             /* reset the instruction */
             instruction_count = 0;
             memset (instruction_str, 0, instruction_size * sizeof (instruction_str[0]));
-
+            
             /* stop checking for instruction_str having a match */
             break;
         }

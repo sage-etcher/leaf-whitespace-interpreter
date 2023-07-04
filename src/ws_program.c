@@ -359,7 +359,7 @@ wsError wsi_call(wsProgram *program)
             /* increment program_control_index */
             program->program_control_index++;
             /* set new program_control at the instruction label index */
-            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
+            program->program_control[program->program_control_index] = program->label_indexes[i];
 
             /* return error success */
             return WS_SUCCESS; 
@@ -381,7 +381,7 @@ wsError wsi_jmp(wsProgram *program)
         if (program->current_instruction->parameter == program->instructions[program->label_indexes[i]].parameter)
         {
             /* set new program_control at the instruction label index */
-            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
+            program->program_control[program->program_control_index] = program->label_indexes[i];
 
             /* return error success */
             return WS_SUCCESS; 
@@ -414,7 +414,7 @@ wsError wsi_jz(wsProgram *program)
         if (program->current_instruction->parameter == program->instructions[program->label_indexes[i]].parameter)
         {
             /* set new program_control at the instruction label index */
-            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
+            program->program_control[program->program_control_index] = program->label_indexes[i];
 
             /* return error success */
             return WS_SUCCESS; 
@@ -447,7 +447,7 @@ wsError wsi_jn(wsProgram *program)
         if (program->current_instruction->parameter == program->instructions[program->label_indexes[i]].parameter)
         {
             /* set new program_control at the instruction label index */
-            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
+            program->program_control[program->program_control_index] = program->label_indexes[i];
 
             /* return error success */
             return WS_SUCCESS; 
