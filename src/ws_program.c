@@ -69,7 +69,7 @@ wsInstDefinition WS_INST[] =
     { WS_PUTI,     "WS_PUTI",     "\t\n \t",   4,  false,  wsi_puti     },  /*  TLST     */
     { WS_READC,    "WS_READC",    "\t\n\t ",   4,  false,  wsi_readc    },  /*  TLTS     */
     { WS_READI,    "WS_READI",    "\t\n\t\t",  4,  false,  wsi_readi    },  /*  TLTT     */
-    { WS_DPRINT,   "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   }   /*  TTL      */
+    /* { WS_DPRINT,   "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   } */   /*  TTL      */
 };
 
 
@@ -503,25 +503,59 @@ wsError wsi_puti(wsProgram *program)
 
 wsError wsi_readc(wsProgram *program)
 {
-    /* guard clauses */
-    if (program->stack_index >= STACK_LEN)
-        return WS_ERR_FULLSTACK;
+    char value;
+    int key_int;
+    char *key_str;
 
-    scanf("%c", &program->stack[program->stack_index]);
-    program->stack_index++;
+    /* check that there is atleast 1 element in the stack */
+    /* top element of stack specifies where in the heap the input is to reside */ 
+    if (program->stack_index < 1)
+        return WS_ERR_TOOFEWITEMS;
 
+    /* get input from stdin, and store it in a temporary variable */
+    scanf("%c", &value); 
+
+    /* get key_int from top of stack */
+    key_int = program->stack[program->stack_index - 1];
+
+    /* allocate and convert int into key_string */
+    key_str = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
+    sprintf(key_str, "%d", key_int);
+    
+    /* add pair to the heap */
+    hash_set(program->heap, key_str, &value, sizeof(value));
+    
+    /* exit gracefully */
+    free (key_str);
     return WS_SUCCESS;
 }
 
 wsError wsi_readi(wsProgram *program)
 {
-    /* guard clauses */
-    if (program->stack_index >= STACK_LEN)
-        return WS_ERR_FULLSTACK;
+    int value;
+    int key_int;
+    char *key_str;
 
-    scanf("%d", &program->stack[program->stack_index]);
-    program->stack_index++;
+    /* check that there is atleast 1 element in the stack */
+    /* top element of stack specifies where in the heap the input is to reside */ 
+    if (program->stack_index < 1)
+        return WS_ERR_TOOFEWITEMS;
 
+    /* get input from stdin, and store it in a temporary variable */
+    scanf("%d", &value); 
+
+    /* get key_int from top of stack */
+    key_int = program->stack[program->stack_index - 1];
+
+    /* allocate and convert int into key_string */
+    key_str = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
+    sprintf(key_str, "%d", key_int);
+    
+    /* add pair to the heap */
+    hash_set(program->heap, key_str, &value, sizeof(value));
+    
+    /* exit gracefully */
+    free (key_str);
     return WS_SUCCESS;
 }
 
