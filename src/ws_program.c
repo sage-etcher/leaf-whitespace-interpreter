@@ -310,7 +310,11 @@ wsError wsi_restore(wsProgram *program)
 /* need to figure out how to get labels to work */
 wsError wsi_label(wsProgram *program)
 {
-    printf("labels and calls are not yet implemented\n");
+    /* i dont think we need to do anything here, we should be able to just 
+     * skip over this */
+
+    /* old */
+    /* printf("labels and calls are not yet implemented\n"); */
 
     return WS_SUCCESS;
 }
