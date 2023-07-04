@@ -1,4 +1,4 @@
-# whitespace-interpreter
+# LeafWSI
 A System independant interpretter for the whitespace programming language
 
 # note:
