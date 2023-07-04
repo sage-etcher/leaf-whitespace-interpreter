@@ -17,7 +17,7 @@
 /* globals */
 wsInstDefinition WS_INST[] =
 {
-    /* index,       inst_name,      inst,      len  param  function         comment  */
+    /* index,      inst_name,     inst,       len  param   function         comment      */
     { WS_PUSH,     "WS_PUSH",     "  ",        2,  true,   wsi_push     },  /*  SS  N L  */
     { WS_DUP,      "WS_DUP",      " \n ",      3,  false,  wsi_dup      },  /*  SLS      */
     { WS_COPY,     "WS_COPY",     " \t ",      3,  true,   wsi_copy     },  /*  STS N L  */
