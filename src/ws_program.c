@@ -348,30 +348,114 @@ wsError wsi_label(wsProgram *program)
 
 wsError wsi_call(wsProgram *program)
 {
-    printf("labels and calls are not yet implemented\n");
+    uint64_t i = 0;
 
-    return WS_SUCCESS;
+    /* loop through the label_indexes list */
+    for (; i < program->label_count; i++)
+    {
+        /* if call param matches the parameter of the label at label_index */
+        if (program->current_instruction->parameter == program->instructions[program->label_indexes[i]].parameter)
+        {
+            /* increment program_control_index */
+            program->program_control_index++;
+            /* set new program_control at the instruction label index */
+            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
+
+            /* return error success */
+            return WS_SUCCESS; 
+        }
+    }
+
+    /* return error that no label was found */
+    return WS_ERR_NOLABELFOUND;
 }
 
 wsError wsi_jmp(wsProgram *program)
 {
-    printf("labels and calls are not yet implemented\n");
+    uint64_t i = 0;
 
-    return WS_SUCCESS;
+    /* loop through the label_indexes list */
+    for (; i < program->label_count; i++)
+    {
+        /* if jump param matches the parameter of the label at label_index */
+        if (program->current_instruction->parameter == program->instructions[program->label_indexes[i]].parameter)
+        {
+            /* set new program_control at the instruction label index */
+            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
+
+            /* return error success */
+            return WS_SUCCESS; 
+        }
+    }
+
+    /* return error that no label was found */
+    return WS_ERR_NOLABELFOUND;
 }
 
 wsError wsi_jz(wsProgram *program)
 {
-    printf("labels and calls are not yet implemented\n");
+    uint64_t i = 0;
 
-    return WS_SUCCESS;
+    /* make sure there is atleast 1 item in the stack to compare against */
+    if (program->inst_count < 1)
+        return WS_ERR_TOOFEWITEMS;
+
+    /* pop the top element of the stack */
+    program->stack_index--;
+
+    /* if top of stack is negative return early a success */
+    if (program->stack[program->stack_index] = 0)
+        return WS_SUCCESS;
+    
+    /* loop through the label_indexes list */
+    for (; i < program->label_count; i++)
+    {
+        /* if jump param matches the parameter of the label at label_index */
+        if (program->current_instruction->parameter == program->instructions[program->label_indexes[i]].parameter)
+        {
+            /* set new program_control at the instruction label index */
+            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
+
+            /* return error success */
+            return WS_SUCCESS; 
+        }
+    }
+
+    /* return error that no label was found */
+    return WS_ERR_NOLABELFOUND;
 }
 
 wsError wsi_jn(wsProgram *program)
 {
-    printf("labels and calls are not yet implemented\n");
+    uint64_t i = 0;
 
-    return WS_SUCCESS;
+    /* make sure there is atleast 1 item in the stack to compare against */
+    if (program->inst_count < 1)
+        return WS_ERR_TOOFEWITEMS;
+
+    /* pop the top element of the stack */
+    program->stack_index--;
+
+    /* if top of stack is negative return early a success */
+    if (program->stack[program->stack_index - 1] < 0)
+        return WS_SUCCESS;
+    
+    /* loop through the label_indexes list */
+    for (; i < program->label_count; i++)
+    {
+        /* if jump param matches the parameter of the label at label_index */
+        if (program->current_instruction->parameter == program->instructions[program->label_indexes[i]].parameter)
+        {
+            /* set new program_control at the instruction label index */
+            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
+
+            /* return error success */
+            return WS_SUCCESS; 
+        }
+    }
+
+    /* return error that no label was found */
+    return WS_ERR_NOLABELFOUND;
 }
 /* not implemented end */
 

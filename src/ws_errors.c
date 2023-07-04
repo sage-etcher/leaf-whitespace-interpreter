@@ -45,7 +45,8 @@ char *WS_ERRSTR[] =
     "end of file reached. no END statement (LLL)",
     "bad instruction",
     "couldn't find a match for that key",
-    "there was an issue getting the provided parameter"
+    "there was an issue getting the provided parameter",
+    "could not find the defined label"
 };
 
 
