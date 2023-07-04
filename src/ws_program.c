@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License 
     along with LeafWSI. If not, see <https://www.gnu.org/licenses/>. 
 */
-
+ 
 /* 
 Contact Information:
     Email   sage.codes@email.com
@@ -468,4 +468,12 @@ void free_wsProgram (wsProgram *program)
 
     /* free the instruction set */
     free (program->instructions);
+    program->inst_count = 0;
+    program->inst_size = 0;
+
+    /* free label index list */
+    free (program->label_indexes);
+    program->label_count = 0;
+    program->label_size = 0;
+
 }

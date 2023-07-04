@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License 
     along with LeafWSI. If not, see <https://www.gnu.org/licenses/>. 
 */
-
+ 
 /* 
 Contact Information:
     Email   sage.codes@email.com
@@ -99,8 +99,13 @@ typedef struct
 {
     /* program instructions */
     wsInstruction *instructions;
-    uint64_t size;
-    uint64_t count;
+    uint64_t inst_size;
+    uint64_t inst_count;
+
+    /* indexes for each label in the instructions list */
+    uint64_t *label_indexes;
+    uint64_t label_size;
+    uint64_t label_count;
 
     /* holds information on where in the instructions list we are durring runtime*/
     uint64_t program_control[STACK_LEN];

@@ -227,16 +227,23 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
 
 
     /* allocate program_list */
-    program->count = 0;
-    program->size = 2;
-    program->instructions = malloc (program->size * sizeof (wsInstruction));
+    program->inst_count = 0;
+    program->inst_size = 2;
+    program->instructions = malloc (program->inst_size * sizeof (wsInstruction));
     assert (program->instructions != NULL);
 
-    /* allocate instructin string */
+    /* allocate label indexes */
+    program->label_count = 0;
+    program->label_size = 2;
+    program->label_indexes = malloc (program->label_size * sizeof (uint64_t));
+    assert (program->label_indexes != NULL);
+
+    /* allocate instruction string */
     instruction_str = malloc ((instruction_size + 1) * sizeof (char));
     assert (instruction_str != NULL);
     /* set instruction_str to all 0s */
     memset (instruction_str, 0, instruction_size * sizeof (instruction_str[0]));
+
 
     /* set instruction pos flag to default to update on first run */
     instruction_pos_flag = true;
@@ -322,18 +329,36 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
                 continue;
             }
 
-            /* if program_list runs out of allocated length, extend it */
-            if (program->count == program->size)
+            /* check if item is a wsLabel, if so add the index to the 
+             * label_index list to quickly search for labels durring a jump */
+            if (inst_check == WS_LABEL)
             {
-                program->size *= 2;
-                program->instructions = realloc (program->instructions, program->size * sizeof (wsInstruction));
+                /* reallocate memory for the label_indexes list */
+                if (program->label_count == program->label_size)
+                {
+                    program->label_size *= 2;
+                    program->label_indexes = realloc (program->label_indexes, program->label_size * sizeof (uint64_t));
+                }
+
+                /* add instruction index to labelindex */
+                program->label_indexes[program->label_count] = program->inst_count;
+
+                /* increment label_count */
+                program->label_count++;
+            }
+
+            /* if program_list runs out of allocated length, extend it */
+            if (program->inst_count == program->inst_size)
+            {
+                program->inst_size *= 2;
+                program->instructions = realloc (program->instructions, program->inst_size * sizeof (wsInstruction));
             }
 
             /* set the instruction type */
-            program->instructions[program->count].instruction = inst_check;
+            program->instructions[program->inst_count].instruction = inst_check;
             /* set the instruction start position */
-            program->instructions[program->count].char_pos = instruction_char_pos;
-            program->instructions[program->count].line_pos = instruction_line_pos;
+            program->instructions[program->inst_count].char_pos = instruction_char_pos;
+            program->instructions[program->inst_count].line_pos = instruction_line_pos;
 
             /* if the instruction takes a parameter, get it */
             if (WS_INST[inst_check].takes_parameter)
@@ -342,11 +367,11 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
                 /* get a paramter and set it */
                 syntax_err_code = get_parameter (file_contents,
                                                  &cur_pos,
-                                                 &program->instructions[program->count].parameter);
+                                                 &program->instructions[program->inst_count].parameter);
             }
 
             /* increment count */
-            program->count++;
+            program->inst_count++;
 
             /* log that a command was just run */
             instruction_pos_flag = true;
@@ -388,7 +413,7 @@ static wsError run_program (wsProgram *program)
     program->program_control_index = 0;
     program->program_control[program->program_control_index] = 0;
 
-    for (; program->program_control[program->program_control_index] < program->count; 
+    for (; program->program_control[program->program_control_index] < program->inst_count; 
            program->program_control[program->program_control_index]++)
     {
         program->current_instruction = &program->instructions[program->program_control[program->program_control_index]];
