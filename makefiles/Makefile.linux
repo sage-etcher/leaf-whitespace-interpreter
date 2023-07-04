@@ -1,4 +1,4 @@
-TARGET_EXEC := wsi
+TARGET_EXEC := lwsi
 
 BUILD_DIR := ./build
 SRC_DIR := ./src
