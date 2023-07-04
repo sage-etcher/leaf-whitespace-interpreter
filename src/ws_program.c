@@ -17,32 +17,32 @@
 /* globals */
 wsInstDefinition WS_INST[] =
 {
-    /* index,       inst_name,      inst,      len  param         comment  */
-    { WS_PUSH,      "WS_PUSH",      "  ",       2,  true  },  /*  SS  N L  */
-    { WS_DUP,       "WS_DUP",       " \n ",     3,  false },  /*  SLS      */
-    { WS_COPY,      "WS_COPY",      " \t ",     3,  true  },  /*  STS N L  */
-    { WS_SWAP,      "WS_SWAP",      " \n\t",    3,  false },  /*  SLT      */
-    { WS_POP,       "WS_POP",       " \n\n",    3,  false },  /*  SLL      */
-    { WS_SLIDE,     "WS_SLIDE",     " \t\n",    3,  true  },  /*  STL N L  */
-    { WS_ADD,       "WS_ADD",       "\t   ",    4,  false },  /*  TSSS     */
-    { WS_SUB,       "WS_SUB",       "\t  \t",   4,  false },  /*  TSST     */
-    { WS_MULT,      "WS_MULT",      "\t  \n",   4,  false },  /*  TSSL     */
-    { WS_DIV,       "WS_DIV",       "\t \t ",   4,  false },  /*  TSTS     */
-    { WS_MOD,       "WS_MOD",       "\t \t\t",  4,  false },  /*  TSTT     */
-    { WS_STORE,     "WS_STORE",     "\t\t ",    3,  false },  /*  TTS      */
-    { WS_RESTORE,   "WS_RESTORE",   "\t\t\t",   3,  false },  /*  TTT      */
-    { WS_LABEL,     "WS_LABEL",     "\n  ",     3,  true  },  /*  LSS N L  */
-    { WS_CALL,      "WS_CALL",      "\n \t",    3,  true  },  /*  LST N L  */
-    { WS_JMP,       "WS_JMP",       "\n \n",    3,  true  },  /*  LSL N L  */
-    { WS_JZ,        "WS_JZ",        "\n\t ",    3,  true  },  /*  LTS N L  */
-    { WS_JN,        "WS_JN",        "\n\t\t",   3,  true  },  /*  LTT N L  */
-    { WS_RET,       "WS_RET",       "\n\t\n",   3,  false },  /*  LTL      */
-    { WS_END,       "WS_END",       "\n\n\n",   3,  false },  /*  LLL      */
-    { WS_PUTC,      "WS_PUTC",      "\t\n  ",   4,  false },  /*  TLSS     */
-    { WS_PUTI,      "WS_PUTI",      "\t\n \t",  4,  false },  /*  TLST     */
-    { WS_READC,     "WS_READC",     "\t\n\t ",  4,  false },  /*  TLTS     */
-    { WS_READI,     "WS_READI",     "\t\n\t\t", 4,  false },  /*  TLTT     */
-    { WS_DPRINT,    "WS_DPRINT",    "\t\t\n",   3,  false }   /*  TTL      */
+    /* index,       inst_name,      inst,      len  param  function         comment  */
+    { WS_PUSH,     "WS_PUSH",     "  ",        2,  true,   wsi_push     },  /*  SS  N L  */
+    { WS_DUP,      "WS_DUP",      " \n ",      3,  false,  wsi_dup      },  /*  SLS      */
+    { WS_COPY,     "WS_COPY",     " \t ",      3,  true,   wsi_copy     },  /*  STS N L  */
+    { WS_SWAP,     "WS_SWAP",     " \n\t",     3,  false,  wsi_swap     },  /*  SLT      */
+    { WS_POP,      "WS_POP",      " \n\n",     3,  false,  wsi_pop      },  /*  SLL      */
+    { WS_SLIDE,    "WS_SLIDE",    " \t\n",     3,  true,   wsi_slide    },  /*  STL N L  */
+    { WS_ADD,      "WS_ADD",      "\t   ",     4,  false,  wsi_add      },  /*  TSSS     */
+    { WS_SUB,      "WS_SUB",      "\t  \t",    4,  false,  wsi_sub      },  /*  TSST     */
+    { WS_MULT,     "WS_MULT",     "\t  \n",    4,  false,  wsi_mult     },  /*  TSSL     */
+    { WS_DIV,      "WS_DIV",      "\t \t ",    4,  false,  wsi_idiv     },  /*  TSTS     */
+    { WS_MOD,      "WS_MOD",      "\t \t\t",   4,  false,  wsi_mod      },  /*  TSTT     */
+    { WS_STORE,    "WS_STORE",    "\t\t ",     3,  false,  wsi_store    },  /*  TTS      */
+    { WS_RESTORE,  "WS_RESTORE",  "\t\t\t",    3,  false,  wsi_restore  },  /*  TTT      */
+    { WS_LABEL,    "WS_LABEL",    "\n  ",      3,  true,   wsi_label    },  /*  LSS N L  */
+    { WS_CALL,     "WS_CALL",     "\n \t",     3,  true,   wsi_call     },  /*  LST N L  */
+    { WS_JMP,      "WS_JMP",      "\n \n",     3,  true,   wsi_jmp      },  /*  LSL N L  */
+    { WS_JZ,       "WS_JZ",       "\n\t ",     3,  true,   wsi_jz       },  /*  LTS N L  */
+    { WS_JN,       "WS_JN",       "\n\t\t",    3,  true,   wsi_jn       },  /*  LTT N L  */
+    { WS_RET,      "WS_RET",      "\n\t\n",    3,  false,  wsi_ret      },  /*  LTL      */
+    { WS_END,      "WS_END",      "\n\n\n",    3,  false,  wsi_end      },  /*  LLL      */
+    { WS_PUTC,     "WS_PUTC",     "\t\n  ",    4,  false,  wsi_putc     },  /*  TLSS     */
+    { WS_PUTI,     "WS_PUTI",     "\t\n \t",   4,  false,  wsi_puti     },  /*  TLST     */
+    { WS_READC,    "WS_READC",    "\t\n\t ",   4,  false,  wsi_readc    },  /*  TLTS     */
+    { WS_READI,    "WS_READI",    "\t\n\t\t",  4,  false,  wsi_readi    },  /*  TLTT     */
+    { WS_DPRINT,   "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   }   /*  TTL      */
 };
 
 
@@ -322,21 +322,21 @@ wsError wsi_call(wsProgram *program)
     return WS_SUCCESS;
 }
 
-wsError wsi_jump(wsProgram *program)
+wsError wsi_jmp(wsProgram *program)
 {
     printf("labels and calls are not yet implemented\n");
 
     return WS_SUCCESS;
 }
 
-wsError wsi_jump_zero(wsProgram *program)
+wsError wsi_jz(wsProgram *program)
 {
     printf("labels and calls are not yet implemented\n");
 
     return WS_SUCCESS;
 }
 
-wsError wsi_jump_negative(wsProgram *program)
+wsError wsi_jn(wsProgram *program)
 {
     printf("labels and calls are not yet implemented\n");
 
@@ -412,18 +412,18 @@ wsError wsi_readi(wsProgram *program)
 
 
 /* debug functions */
-void print_stack (wsInt stack[], wsInt stack_index)
+wsError wsi_dprint(wsProgram *program)
 {
     wsInt i = -1;
 
     printf ("stack = [");
-    for (; i < stack_index; i++)
+    for (; i < program->stack_index; i++)
     {
-        printf ("%d, ", stack[i]);
+        printf ("%d, ", program->stack[i]);
     }
     printf ("]\n");
 
-    return;
+    return WS_SUCCESS;
 }
 
 

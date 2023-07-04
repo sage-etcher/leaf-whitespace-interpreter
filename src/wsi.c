@@ -67,8 +67,12 @@ int main (int argc, char **argv)
         exit (error_code);
     }
 
-    /* run the program */
-    printf ("program interpretted correctly \n");
+    error_code = run_program (&program);
+    if (error_code != WS_SUCCESS)
+    {
+        free_wsProgram (&program);
+        exit (error_code);
+    }
 
     /* exit gracefully */
     /* free allocated memory */
@@ -249,7 +253,7 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
             /* set global file possitioning to the start of error */
             g_char_pos = instruction_char_pos;
             g_line_pos = instruction_line_pos;
-
+           
             /* tell the loop to exit */
             runtime = false;
             continue;
@@ -328,7 +332,14 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
             break;
         }
     }
+    
 
+    if (syntax_err_code != WS_SUCCESS)
+    {
+        log_error (syntax_err_code, "", g_line_pos, g_char_pos);
+    }
+
+        
     /* exit gracefully */
     /* free unneeded memory */
     free (instruction_str);
@@ -339,6 +350,37 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
 
 static wsError run_program (wsProgram *program)
 {
+    /* runtime error code */
+    wsError runtime_err_code = WS_SUCCESS;
 
+    /* initiate the programs heap */
+    program->heap = new_hashMap ();
+    program->exit = false;
+    
+    /* loop through instructions */
+    program->program_control_index = 0;
+    program->program_control[program->program_control_index] = 0;
+
+    for (; program->program_control[program->program_control_index] < program->count; 
+           program->program_control[program->program_control_index]++)
+    {
+        program->current_instruction = &program->instructions[program->program_control[program->program_control_index]];
+
+        runtime_err_code = WS_INST[program->current_instruction->instruction].inst_function (program);
+
+        if (program->exit == true || runtime_err_code != WS_SUCCESS)
+        {
+            break;
+        }
+        
+    }
+
+    
+    if (runtime_err_code != WS_SUCCESS)
+    {
+        log_error (runtime_err_code, WS_INST[runtime_err_code].inst_name, g_line_pos, g_char_pos);
+    }
+
+    return runtime_err_code;
 }
 

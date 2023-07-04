@@ -54,15 +54,6 @@ typedef enum
     WS_INST_COUNT
 } WS_INST_INDEX;
 
-typedef struct
-{
-    WS_INST_INDEX index;
-    char *inst_name;
-    char *inst_string;
-    size_t inst_string_len;
-    bool takes_parameter;
-} wsInstDefinition;
-
 /* typedefinition for default int size for whitespace script */
 typedef int32_t wsInt;
 
@@ -101,6 +92,15 @@ typedef struct
     bool exit;
 } wsProgram;
 
+typedef struct
+{
+    WS_INST_INDEX index;
+    char *inst_name;
+    char *inst_string;
+    size_t inst_string_len;
+    bool takes_parameter;
+    wsError (*inst_function)(wsProgram*);
+} wsInstDefinition;
 
 /* global variables */
 extern wsInstDefinition WS_INST[];
@@ -123,18 +123,17 @@ wsError wsi_store          (wsProgram *program);
 wsError wsi_restore        (wsProgram *program);
 wsError wsi_label          (wsProgram *program);
 wsError wsi_call           (wsProgram *program);
-wsError wsi_jump           (wsProgram *program);
-wsError wsi_jump_zero      (wsProgram *program);
-wsError wsi_jump_negative  (wsProgram *program);
+wsError wsi_jmp            (wsProgram *program);
+wsError wsi_jz             (wsProgram *program);
+wsError wsi_jn             (wsProgram *program);
 wsError wsi_ret            (wsProgram *program);
 wsError wsi_end            (wsProgram *program);
 wsError wsi_putc           (wsProgram *program);
 wsError wsi_puti           (wsProgram *program);
 wsError wsi_readc          (wsProgram *program);
 wsError wsi_readi          (wsProgram *program);
-
 /* debug functions */
-void print_stack (wsInt stack[], wsInt stack_index);
+wsError wsi_dprint         (wsProgram *program);
 
 /* frees wsProgram variable */
 void free_wsProgram (wsProgram *program);
