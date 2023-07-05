@@ -7,3 +7,5 @@ ws_examples/*.txt
 /Makefile
 /*.txt 
 ws_examples/whitelips*.ws 
+/*.sh
+/*.bat
