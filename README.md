@@ -8,6 +8,6 @@ ws_program.c contains the program, instruction, and instructiondefinition dataty
 
 ws_error.c contains whitespace error logging constants and functios
 
-hashmap.c contains an seperated hashmap element, <string>: <generic>
+hashmap.c contains an seperated hashmap element, \<int32_t\>:\<int32_t\>
 
 utils.c contains general ease of life function and macros
