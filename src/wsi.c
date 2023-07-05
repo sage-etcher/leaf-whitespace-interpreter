@@ -419,19 +419,8 @@ static wsError run_program (wsProgram *program)
         /* set current instrution pointer */
         program->current_instruction = &program->instructions[*program_counter];
 
-        /* view each command ran */
-        /* printf ("%d %s", *program_counter, WS_INST[program->current_instruction->instruction].inst_name);
-        if (WS_INST[program->current_instruction->instruction].takes_parameter)
-            printf (" %d", program->current_instruction->parameter);
-        printf ("\n");
-        */ 
         /* run the current instruction's dedicated function */
         runtime_err_code = WS_INST[program->current_instruction->instruction].inst_function (program);
-        
-        /* view stack after command is ran */
-        /*runtime_err_code = wsi_dprint (program);
-        printf ("\n");
-        */
         
         /* if the function runs poorly or sends an end command then exit the program */
         if (program->exit == true || runtime_err_code != WS_SUCCESS)
