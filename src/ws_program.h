@@ -81,8 +81,6 @@ typedef enum
     WS_INST_COUNT
 } WS_INST_INDEX;
 
-/* typedefinition for default int size for whitespace script */
-typedef int32_t wsInt;
 
 /* whitespace instruction container */
 typedef struct
