@@ -4,21 +4,21 @@
     LeafWSI - a C based, cross-platform, whitespace lang interpretter.
     Copyright (C) 2023  Sage I. Hendricks
 
-    LeafWSI is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
+    LeafWSI is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    LeafWSI is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+    LeafWSI is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License 
-    along with LeafWSI. If not, see <https://www.gnu.org/licenses/>. 
+    You should have received a copy of the GNU General Public License
+    along with LeafWSI. If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* 
+/*
 Contact Information:
     Email   sage.codes@email.com
     Github  sage-etcher
@@ -37,39 +37,19 @@ Contact Information:
 
 /* keyValuePair functions */
 /* create new keyValuePair */
-keyValuePair *new_keyValuePair (char *key, void *value, size_t value_size)
+keyValuePair *new_keyValuePair (int32_t key, int32_t value)
 {
     keyValuePair *new_pair;
-
-    /* guard clauses */
-    /* DONT TOUCH NULLs */
-    assert (key != NULL);
-    assert (value != NULL);
 
     /* allocate new_pair */
     /* we are using a keyValuePair POINTER, to avoid the compiler trying to free local variables */
     new_pair = (keyValuePair *)malloc (sizeof (keyValuePair));
 
     /* assign the Pair's Key */
-    /* get key string length */
-    new_pair->key_size = strlen (key);
-
-    /* allocate and copy key over to new_pair.key */
-    /* add 1s are to account for null characters in conversion from starting count at 0 vs 1 */
-    new_pair->key = (char *)malloc ((new_pair->key_size + 1) * sizeof (char));
-    assert (new_pair->key != NULL);
-    memcpy (new_pair->key, key, (new_pair->key_size + 1) * sizeof (char));
-    /* backup, incase source "key" was not null terminated, add a null terminator */
-    new_pair->key[new_pair->key_size] = '\0';
+    new_pair->key = key;
 
     /* assigne the Pair's Value */
-    /* copy value_size to new_pair */
-    new_pair->value_size = value_size;
-
-    /* allocate and copy value over */
-    new_pair->value = (void *)malloc (value_size);
-    assert (new_pair->value != NULL);
-    memcpy (new_pair->value, value, new_pair->value_size);
+    new_pair->value = value;
 
     return new_pair;
 }
@@ -80,12 +60,6 @@ void free_keyValuePair (keyValuePair *pair)
     /* guard clauses */
     /* only work with valid pointers */
     assert (pair != NULL);
-    assert (pair->key != NULL);
-    assert (pair->value != NULL);
-
-    /* free allocated memory */
-    free (pair->key);
-    free (pair->value);
 
     /* free pair */
     free (pair);
@@ -148,7 +122,7 @@ void hash_extend (hashMap *hash_map)
 }
 
 /* append a new item to the end of a hashmap*/
-void hash_append (hashMap *hash_map, char *key, void *value, size_t value_size)
+void hash_append (hashMap *hash_map, int32_t key, int32_t value)
 {
     uintmax_t new_index = hash_map->count;
 
@@ -156,8 +130,6 @@ void hash_append (hashMap *hash_map, char *key, void *value, size_t value_size)
     /* dont work with nulls */
     assert (hash_map != NULL);
     assert (hash_map->item_list != NULL);
-    assert (key != NULL);
-    assert (value != NULL);
     /* YELL VIOLENTLY if the size is 0, DONT WORK WITH IT, JUST CEASE */
     assert (hash_map->size != 0);
 
@@ -169,7 +141,7 @@ void hash_append (hashMap *hash_map, char *key, void *value, size_t value_size)
         hash_extend (hash_map);
 
     /* next, create a new keyValuePair */
-    hash_map->item_list[new_index] = new_keyValuePair (key, value, value_size);
+    hash_map->item_list[new_index] = new_keyValuePair (key, value);
 
 
     /* increment hash_map->count */
@@ -200,18 +172,16 @@ void hash_pop (hashMap *hash_map)
 
 /* search a hashMap for a specific key, and put the keyValuePair's index in a var */
 /* if a matching key is found, return true. otherwise, return false */
-bool hash_search_index (hashMap *hash_map, char *key, void *return_index)
+bool hash_search_index (hashMap *hash_map, int32_t key, uintmax_t *return_index)
 {
     uintmax_t i = 0;
     keyValuePair *item;
-    uintmax_t key_size = strlen (key);
     bool match_found = false;
 
     /* function parameter guard clauses */
     /* dont work with NULLs */
     assert (hash_map != NULL);
     assert (hash_map->item_list != NULL);
-    assert (key != NULL);
 
     /* check each element in the hashMap, until one has a matching key*/
     /* stop looping through when either, i is equal to count, or we find a match */
@@ -222,17 +192,16 @@ bool hash_search_index (hashMap *hash_map, char *key, void *return_index)
 
         /* item guard clauses */
         assert (item != NULL);
-        assert (item->key != NULL);
 
         /* compare the item's key and the param key */
         /* if the keys match, set return variables to adequate values */
-        if (strncmp (item->key, key, HASHMAP_MAX(item->key_size, key_size)) == 0)
+        if (item->key == key)
         {
             /* set return bool to true, showing we found a match */
             match_found = true;
 
             /* copy item's index into the return_index var */
-            (*(uintptr_t *)return_index) = i;
+            (*return_index) = i;
         }
     }
 
@@ -242,7 +211,7 @@ bool hash_search_index (hashMap *hash_map, char *key, void *return_index)
 
 /* search a hashMap for a specific key, and puts the key's value into a variable */
 /* if a matching key is found, return true. otherwise, return false */
-bool hash_search (hashMap *hash_map, char *key, void *return_value)
+bool hash_search (hashMap *hash_map, int32_t key, int32_t *return_value)
 {
     uintmax_t match_index;
     keyValuePair *match;
@@ -252,7 +221,6 @@ bool hash_search (hashMap *hash_map, char *key, void *return_value)
     /* dont work with NULLs */
     assert (hash_map != NULL);
     assert (hash_map->item_list != NULL);
-    assert (key != NULL);
 
     /* search for the provided key in the hashmap */
     match_found = hash_search_index  (hash_map, key, &match_index);
@@ -261,7 +229,7 @@ bool hash_search (hashMap *hash_map, char *key, void *return_value)
     {
         match = hash_map->item_list[match_index];
         /* copy value from match->value into return_value */
-        memcpy (return_value, match->value, match->value_size);
+        (*return_value) = match->value;
     }
 
     /* return true if match is found, false if not */
@@ -270,7 +238,7 @@ bool hash_search (hashMap *hash_map, char *key, void *return_value)
 
 
 /* set an element in the hashMap */
-void hash_set (hashMap *hash_map, char *key, void *value, size_t value_size)
+void hash_set (hashMap *hash_map, int32_t key, int32_t value)
 {
     bool key_exists;
     uintmax_t key_index;
@@ -284,21 +252,13 @@ void hash_set (hashMap *hash_map, char *key, void *value, size_t value_size)
     /* if key doesnt exist, append a new item, and exit function */
     if (!key_exists)
     {
-        hash_append (hash_map, key, value, value_size);
+        hash_append (hash_map, key, value);
         return;
     }
 
     /* if key does exist update the value */
     item = hash_map->item_list[key_index];
 
-    /* first update the item size */
-    item->value_size = value_size;
-
-    /* then free the old value */
-    free (item->value);
-
-    /* and finally allocate and copy the new value over */
-    item->value = (void *)malloc (value_size);
-    assert (item->value != NULL);
-    memcpy (item->value, value, item->value_size);
+    /* and finally copy the new value over */
+    item->value = value;
 }
