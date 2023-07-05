@@ -424,19 +424,15 @@ static wsError run_program (wsProgram *program)
         /* set current instrution pointer */
         program->current_instruction = &program->instructions[*program_counter];
 
-        /*
-        printf ("%lu %lu, %s\n", program->program_control_index, *program_counter, WS_INST[program->current_instruction->instruction].inst_name);
-        runtime_err_code = wsi_dprint (program);
-        putchar ('\n');
-        */
-
         /* run the current instruction's dedicated function */
         runtime_err_code = WS_INST[program->current_instruction->instruction].inst_function (program);
+
         /* if the function runs poorly or sends an end command then exit the program */
         if (program->exit == true || runtime_err_code != WS_SUCCESS)
         {
             break;
         }
+
 
         /* increment to the next instruction */
         (*program_counter)++;

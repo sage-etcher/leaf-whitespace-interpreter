@@ -286,8 +286,8 @@ wsError wsi_store(wsProgram *program)
     /* get the key and value from the stack */
     /* top item is key */
     /* 2nd to top is value */
-    key_int = program->stack[program->stack_index - 1];
-    value = program->stack[program->stack_index - 2];
+    key_int = program->stack[program->stack_index - 2];
+    value = program->stack[program->stack_index - 1];
 
     /* take the top 2 items off the stack */
     program->stack_index -= 2;
@@ -437,7 +437,7 @@ wsError wsi_jn(wsProgram *program)
     program->stack_index--;
 
     /* if top of stack isn't negative return early without jumping */
-    if (!(program->stack[program->stack_index - 1] < 0))
+    if (!(program->stack[program->stack_index] < 0))
         return WS_SUCCESS;
 
     /* loop through the label_indexes list */
@@ -518,6 +518,9 @@ wsError wsi_readc(wsProgram *program)
     /* get key_int from top of stack */
     key_int = program->stack[program->stack_index - 1];
 
+    /* pop the top element off the stack */
+    program->stack_index--;
+
     /* allocate and convert int into key_string */
     key_str = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
     sprintf(key_str, "%d", key_int);
@@ -547,6 +550,9 @@ wsError wsi_readi(wsProgram *program)
     /* get key_int from top of stack */
     key_int = program->stack[program->stack_index - 1];
 
+    /* pop the top element off the stack */
+    program->stack_index--;
+
     /* allocate and convert int into key_string */
     key_str = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
     sprintf(key_str, "%d", key_int);
@@ -563,7 +569,7 @@ wsError wsi_readi(wsProgram *program)
 /* debug functions */
 wsError wsi_dprint(wsProgram *program)
 {
-    wsInt i = -1;
+    wsInt i = 0;
 
     printf ("stack = [");
     for (; i < program->stack_index; i++)
