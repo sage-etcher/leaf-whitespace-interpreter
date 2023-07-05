@@ -34,10 +34,11 @@ Contact Information:
 #include <stdbool.h>
 #include <assert.h>
 
+#include "config.h"
 
 /* keyValuePair functions */
 /* create new keyValuePair */
-keyValuePair *new_keyValuePair (int32_t key, int32_t value)
+keyValuePair *new_keyValuePair (wsInt key, wsInt value)
 {
     keyValuePair *new_pair;
 
@@ -122,7 +123,7 @@ void hash_extend (hashMap *hash_map)
 }
 
 /* append a new item to the end of a hashmap*/
-void hash_append (hashMap *hash_map, int32_t key, int32_t value)
+void hash_append (hashMap *hash_map, wsInt key, wsInt value)
 {
     uintmax_t new_index = hash_map->count;
 
@@ -172,7 +173,7 @@ void hash_pop (hashMap *hash_map)
 
 /* search a hashMap for a specific key, and put the keyValuePair's index in a var */
 /* if a matching key is found, return true. otherwise, return false */
-bool hash_search_index (hashMap *hash_map, int32_t key, uintmax_t *return_index)
+bool hash_search_index (hashMap *hash_map, wsInt key, uintmax_t *return_index)
 {
     uintmax_t i = 0;
     keyValuePair *item;
@@ -211,7 +212,7 @@ bool hash_search_index (hashMap *hash_map, int32_t key, uintmax_t *return_index)
 
 /* search a hashMap for a specific key, and puts the key's value into a variable */
 /* if a matching key is found, return true. otherwise, return false */
-bool hash_search (hashMap *hash_map, int32_t key, int32_t *return_value)
+bool hash_search (hashMap *hash_map, wsInt key, wsInt *return_value)
 {
     uintmax_t match_index;
     keyValuePair *match;
@@ -238,7 +239,7 @@ bool hash_search (hashMap *hash_map, int32_t key, int32_t *return_value)
 
 
 /* set an element in the hashMap */
-void hash_set (hashMap *hash_map, int32_t key, int32_t value)
+void hash_set (hashMap *hash_map, wsInt key, wsInt value)
 {
     bool key_exists;
     uintmax_t key_index;

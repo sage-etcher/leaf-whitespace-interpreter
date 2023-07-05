@@ -39,6 +39,8 @@ Contact Information:
 #include <stdbool.h>
 #include <assert.h>
 
+#include "config.h"
+
 
 /* macros */
 #define HASHMAP_MAX(a,b) (a > b ? a : b)
@@ -48,8 +50,8 @@ Contact Information:
 /* type definitions */
 typedef struct
 {
-    int32_t key;
-    int32_t value;
+    wsInt key;
+    wsInt value;
 } keyValuePair;
 
 typedef struct
@@ -61,17 +63,17 @@ typedef struct
 
 
 /* function prototypes */
-keyValuePair *new_keyValuePair (int32_t key, int32_t value);
+keyValuePair *new_keyValuePair (wsInt key, wsInt value);
 void free_keyValuePair (keyValuePair *pair);
 
 hashMap *new_hashMap (void);
 void free_hashMap (hashMap *hash_map);
 
 void hash_extend       (hashMap *hash_map);
-void hash_append       (hashMap *hash_map, int32_t key, int32_t value);
+void hash_append       (hashMap *hash_map, wsInt key, wsInt value);
 void hash_pop          (hashMap *hash_map);
-bool hash_search_index (hashMap *hash_map, int32_t key, uintmax_t *return_index);
-bool hash_search       (hashMap *hash_map, int32_t key, int32_t *return_value);
-void hash_set          (hashMap *hash_map, int32_t key, int32_t value);
+bool hash_search_index (hashMap *hash_map, wsInt key, uintmax_t *return_index);
+bool hash_search       (hashMap *hash_map, wsInt key, wsInt *return_value);
+void hash_set          (hashMap *hash_map, wsInt key, wsInt value);
 
 #endif

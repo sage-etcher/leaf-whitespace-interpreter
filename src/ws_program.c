@@ -481,7 +481,7 @@ wsError wsi_puti(wsProgram *program)
     if (program->stack_index <= 0)
         return WS_ERR_TOOFEWITEMS;
 
-    printf("%d", program->stack[program->stack_index - 1]);
+    printf("%lld", program->stack[program->stack_index - 1]);
     program->stack_index--;
 
     return WS_SUCCESS;
@@ -490,7 +490,7 @@ wsError wsi_puti(wsProgram *program)
 wsError wsi_readc(wsProgram *program)
 {
     char value;
-    int key;
+    wsInt key;
 
     /* check that there is atleast 1 element in the stack */
     /* top element of stack specifies where in the heap the input is to reside */
@@ -515,8 +515,8 @@ wsError wsi_readc(wsProgram *program)
 
 wsError wsi_readi(wsProgram *program)
 {
-    int value;
-    int key;
+    wsInt value;
+    wsInt key;
 
     /* check that there is atleast 1 element in the stack */
     /* top element of stack specifies where in the heap the input is to reside */
@@ -524,7 +524,7 @@ wsError wsi_readi(wsProgram *program)
         return WS_ERR_TOOFEWITEMS;
 
     /* get input from stdin, and store it in a temporary variable */
-    scanf("%d", &value);
+    scanf("%lld", &value);
 
     /* get key_int from top of stack */
     key = program->stack[program->stack_index - 1];
@@ -548,7 +548,7 @@ wsError wsi_dprint(wsProgram *program)
     printf ("stack = [");
     for (; i < program->stack_index; i++)
     {
-        printf ("%d, ", program->stack[i]);
+        printf ("%lld, ", program->stack[i]);
     }
     printf ("]\n");
 
