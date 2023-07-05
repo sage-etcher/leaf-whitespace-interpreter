@@ -48,7 +48,7 @@ typedef int64_t wsInt;
 
 
 /* enable more characters, WIP */
-/* #define SETLOCALE_LC_ALL */
+#define SETLOCALE_LC_ALL
 
 /* edit above this point */
 /* CONFIG STOP ediiting */

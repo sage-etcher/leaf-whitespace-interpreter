@@ -471,7 +471,7 @@ wsError wsi_putc(wsProgram *program)
     if (program->stack_index <= 0)
         return WS_ERR_TOOFEWITEMS;
    
-    printf("%llc", program->stack[program->stack_index - 1]);
+    printf("%lc", program->stack[program->stack_index - 1]);
     program->stack_index--;
 
     return WS_SUCCESS;
