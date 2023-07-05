@@ -276,50 +276,38 @@ wsError wsi_mod(wsProgram *program)
 wsError wsi_store(wsProgram *program)
 {
     wsInt value;
-    wsInt key_int;
-    char *key_string;
+    wsInt key;
 
     /* guard clauses */
     if (program->stack_index < 2)
         return WS_ERR_TOOFEWITEMS;
 
     /* get the key and value from the stack */
-    /* top item is key */
-    /* 2nd to top is value */
-    key_int = program->stack[program->stack_index - 2];
+    /* top item is value */
+    /* 2nd to top is key */
+    key   = program->stack[program->stack_index - 2];
     value = program->stack[program->stack_index - 1];
 
     /* take the top 2 items off the stack */
     program->stack_index -= 2;
 
-    /* allocate and convert int into key_string */
-    key_string = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
-    sprintf(key_string, "%d", key_int);
-
     /* add pair to the heap */
-    hash_set(program->heap, key_string, &value, sizeof(value));
+    hash_set(program->heap, key, value);
 
-    /* free the temporary key */
-    free(key_string);
     return WS_SUCCESS;
 }
 
 wsError wsi_restore(wsProgram *program)
 {
     wsInt value;
-    wsInt key_int;
-    char *key_string;
+    wsInt key;
     bool match_found;
 
     /* get the key from the stack */
-    key_int = program->stack[program->stack_index - 1];
-
-    /* allocate and convert int into key_string */
-    key_string = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
-    sprintf(key_string, "%d", key_int);
+    key = program->stack[program->stack_index - 1];
 
     /* look for a match */
-    match_found = hash_search(program->heap, key_string, &value);
+    match_found = hash_search(program->heap, key, &value);
 
     /* if no match is found return with error code */
     if (!match_found)
@@ -328,8 +316,6 @@ wsError wsi_restore(wsProgram *program)
     /* add item to stack */
     program->stack[program->stack_index - 1] = value;
 
-    /* free key_string */
-    free(key_string);
     return WS_SUCCESS;
 }
 
@@ -504,8 +490,7 @@ wsError wsi_puti(wsProgram *program)
 wsError wsi_readc(wsProgram *program)
 {
     char value;
-    int key_int;
-    char *key_str;
+    int key;
 
     /* check that there is atleast 1 element in the stack */
     /* top element of stack specifies where in the heap the input is to reside */
@@ -516,28 +501,22 @@ wsError wsi_readc(wsProgram *program)
     scanf("%c", &value);
 
     /* get key_int from top of stack */
-    key_int = program->stack[program->stack_index - 1];
+    key = program->stack[program->stack_index - 1];
 
     /* pop the top element off the stack */
     program->stack_index--;
 
-    /* allocate and convert int into key_string */
-    key_str = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
-    sprintf(key_str, "%d", key_int);
-
     /* add pair to the heap */
-    hash_set(program->heap, key_str, &value, sizeof(value));
+    hash_set(program->heap, key, value);
 
     /* exit gracefully */
-    free (key_str);
     return WS_SUCCESS;
 }
 
 wsError wsi_readi(wsProgram *program)
 {
     int value;
-    int key_int;
-    char *key_str;
+    int key;
 
     /* check that there is atleast 1 element in the stack */
     /* top element of stack specifies where in the heap the input is to reside */
@@ -548,20 +527,15 @@ wsError wsi_readi(wsProgram *program)
     scanf("%d", &value);
 
     /* get key_int from top of stack */
-    key_int = program->stack[program->stack_index - 1];
+    key = program->stack[program->stack_index - 1];
 
     /* pop the top element off the stack */
     program->stack_index--;
 
-    /* allocate and convert int into key_string */
-    key_str = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
-    sprintf(key_str, "%d", key_int);
-
     /* add pair to the heap */
-    hash_set(program->heap, key_str, &value, sizeof(value));
+    hash_set(program->heap, key, value);
 
     /* exit gracefully */
-    free (key_str);
     return WS_SUCCESS;
 }
 
