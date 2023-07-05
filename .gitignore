@@ -5,3 +5,5 @@ src/include/**
 src/lib/**
 ws_examples/*.txt
 /Makefile
+/*.txt 
+ws_examples/whitelips*.ws 

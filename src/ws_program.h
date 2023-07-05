@@ -4,21 +4,21 @@
     LeafWSI - a C based, cross-platform, whitespace lang interpretter.
     Copyright (C) 2023  Sage I. Hendricks
 
-    LeafWSI is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
+    LeafWSI is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    LeafWSI is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+    LeafWSI is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License 
-    along with LeafWSI. If not, see <https://www.gnu.org/licenses/>. 
+    You should have received a copy of the GNU General Public License
+    along with LeafWSI. If not, see <https://www.gnu.org/licenses/>.
 */
- 
-/* 
+
+/*
 Contact Information:
     Email   sage.codes@email.com
     Github  sage-etcher
@@ -126,7 +126,7 @@ typedef struct
 
 typedef struct
 {
-    WS_INST_INDEX index;
+/*    WS_INST_INDEX index; */
     char *inst_name;
     char *inst_string;
     size_t inst_string_len;

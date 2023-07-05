@@ -4,21 +4,21 @@
     LeafWSI - a C based, cross-platform, whitespace lang interpretter.
     Copyright (C) 2023  Sage I. Hendricks
 
-    LeafWSI is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
+    LeafWSI is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    LeafWSI is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+    LeafWSI is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License 
-    along with LeafWSI. If not, see <https://www.gnu.org/licenses/>. 
+    You should have received a copy of the GNU General Public License
+    along with LeafWSI. If not, see <https://www.gnu.org/licenses/>.
 */
- 
-/* 
+
+/*
 Contact Information:
     Email   sage.codes@email.com
     Github  sage-etcher
@@ -45,31 +45,31 @@ Contact Information:
 wsInstDefinition WS_INST[] =
 {
     /* index,      inst_name,     inst,       len  param   function         comment      */
-    { WS_PUSH,     "WS_PUSH",     "  ",        2,  true,   wsi_push     },  /*  SS  N L  */
-    { WS_DUP,      "WS_DUP",      " \n ",      3,  false,  wsi_dup      },  /*  SLS      */
-    { WS_COPY,     "WS_COPY",     " \t ",      3,  true,   wsi_copy     },  /*  STS N L  */
-    { WS_SWAP,     "WS_SWAP",     " \n\t",     3,  false,  wsi_swap     },  /*  SLT      */
-    { WS_POP,      "WS_POP",      " \n\n",     3,  false,  wsi_pop      },  /*  SLL      */
-    { WS_SLIDE,    "WS_SLIDE",    " \t\n",     3,  true,   wsi_slide    },  /*  STL N L  */
-    { WS_ADD,      "WS_ADD",      "\t   ",     4,  false,  wsi_add      },  /*  TSSS     */
-    { WS_SUB,      "WS_SUB",      "\t  \t",    4,  false,  wsi_sub      },  /*  TSST     */
-    { WS_MULT,     "WS_MULT",     "\t  \n",    4,  false,  wsi_mult     },  /*  TSSL     */
-    { WS_DIV,      "WS_DIV",      "\t \t ",    4,  false,  wsi_idiv     },  /*  TSTS     */
-    { WS_MOD,      "WS_MOD",      "\t \t\t",   4,  false,  wsi_mod      },  /*  TSTT     */
-    { WS_STORE,    "WS_STORE",    "\t\t ",     3,  false,  wsi_store    },  /*  TTS      */
-    { WS_RESTORE,  "WS_RESTORE",  "\t\t\t",    3,  false,  wsi_restore  },  /*  TTT      */
-    { WS_LABEL,    "WS_LABEL",    "\n  ",      3,  true,   wsi_label    },  /*  LSS N L  */
-    { WS_CALL,     "WS_CALL",     "\n \t",     3,  true,   wsi_call     },  /*  LST N L  */
-    { WS_JMP,      "WS_JMP",      "\n \n",     3,  true,   wsi_jmp      },  /*  LSL N L  */
-    { WS_JZ,       "WS_JZ",       "\n\t ",     3,  true,   wsi_jz       },  /*  LTS N L  */
-    { WS_JN,       "WS_JN",       "\n\t\t",    3,  true,   wsi_jn       },  /*  LTT N L  */
-    { WS_RET,      "WS_RET",      "\n\t\n",    3,  false,  wsi_ret      },  /*  LTL      */
-    { WS_END,      "WS_END",      "\n\n\n",    3,  false,  wsi_end      },  /*  LLL      */
-    { WS_PUTC,     "WS_PUTC",     "\t\n  ",    4,  false,  wsi_putc     },  /*  TLSS     */
-    { WS_PUTI,     "WS_PUTI",     "\t\n \t",   4,  false,  wsi_puti     },  /*  TLST     */
-    { WS_READC,    "WS_READC",    "\t\n\t ",   4,  false,  wsi_readc    },  /*  TLTS     */
-    { WS_READI,    "WS_READI",    "\t\n\t\t",  4,  false,  wsi_readi    },  /*  TLTT     */
-    { WS_DPRINT,   "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   }   /*  TTL      */
+    { /*WS_PUSH,   */  "WS_PUSH",     "  ",        2,  true,   wsi_push     },  /*  SS  N L  */
+    { /*WS_DUP,    */  "WS_DUP",      " \n ",      3,  false,  wsi_dup      },  /*  SLS      */
+    { /*WS_COPY,   */  "WS_COPY",     " \t ",      3,  true,   wsi_copy     },  /*  STS N L  */
+    { /*WS_SWAP,   */  "WS_SWAP",     " \n\t",     3,  false,  wsi_swap     },  /*  SLT      */
+    { /*WS_POP,    */  "WS_POP",      " \n\n",     3,  false,  wsi_pop      },  /*  SLL      */
+    { /*WS_SLIDE,  */  "WS_SLIDE",    " \t\n",     3,  true,   wsi_slide    },  /*  STL N L  */
+    { /*WS_ADD,    */  "WS_ADD",      "\t   ",     4,  false,  wsi_add      },  /*  TSSS     */
+    { /*WS_SUB,    */  "WS_SUB",      "\t  \t",    4,  false,  wsi_sub      },  /*  TSST     */
+    { /*WS_MULT,   */  "WS_MULT",     "\t  \n",    4,  false,  wsi_mult     },  /*  TSSL     */
+    { /*WS_DIV,    */  "WS_DIV",      "\t \t ",    4,  false,  wsi_idiv     },  /*  TSTS     */
+    { /*WS_MOD,    */  "WS_MOD",      "\t \t\t",   4,  false,  wsi_mod      },  /*  TSTT     */
+    { /*WS_STORE,  */  "WS_STORE",    "\t\t ",     3,  false,  wsi_store    },  /*  TTS      */
+    { /*WS_RESTORE,*/  "WS_RESTORE",  "\t\t\t",    3,  false,  wsi_restore  },  /*  TTT      */
+    { /*WS_LABEL,  */  "WS_LABEL",    "\n  ",      3,  true,   wsi_label    },  /*  LSS N L  */
+    { /*WS_CALL,   */  "WS_CALL",     "\n \t",     3,  true,   wsi_call     },  /*  LST N L  */
+    { /*WS_JMP,    */  "WS_JMP",      "\n \n",     3,  true,   wsi_jmp      },  /*  LSL N L  */
+    { /*WS_JZ,     */  "WS_JZ",       "\n\t ",     3,  true,   wsi_jz       },  /*  LTS N L  */
+    { /*WS_JN,     */  "WS_JN",       "\n\t\t",    3,  true,   wsi_jn       },  /*  LTT N L  */
+    { /*WS_RET,    */  "WS_RET",      "\n\t\n",    3,  false,  wsi_ret      },  /*  LTL      */
+    { /*WS_END,    */  "WS_END",      "\n\n\n",    3,  false,  wsi_end      },  /*  LLL      */
+    { /*WS_PUTC,   */  "WS_PUTC",     "\t\n  ",    4,  false,  wsi_putc     },  /*  TLSS     */
+    { /*WS_PUTI,   */  "WS_PUTI",     "\t\n \t",   4,  false,  wsi_puti     },  /*  TLST     */
+    { /*WS_READC,  */  "WS_READC",    "\t\n\t ",   4,  false,  wsi_readc    },  /*  TLTS     */
+    { /*WS_READI,  */  "WS_READI",    "\t\n\t\t",  4,  false,  wsi_readi    },  /*  TLTT     */
+    { /*WS_DPRINT, */  "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   }   /*  TTL      */
 };
 
 
@@ -337,7 +337,7 @@ wsError wsi_restore(wsProgram *program)
 /* need to figure out how to get labels to work */
 wsError wsi_label(wsProgram *program)
 {
-    /* i dont think we need to do anything here, we should be able to just 
+    /* i dont think we need to do anything here, we should be able to just
      * skip over this */
 
     /* old */
@@ -362,7 +362,7 @@ wsError wsi_call(wsProgram *program)
             program->program_control[program->program_control_index] = program->label_indexes[i];
 
             /* return error success */
-            return WS_SUCCESS; 
+            return WS_SUCCESS;
         }
     }
 
@@ -384,7 +384,7 @@ wsError wsi_jmp(wsProgram *program)
             program->program_control[program->program_control_index] = program->label_indexes[i];
 
             /* return error success */
-            return WS_SUCCESS; 
+            return WS_SUCCESS;
         }
     }
 
@@ -403,10 +403,10 @@ wsError wsi_jz(wsProgram *program)
     /* pop the top element of the stack */
     program->stack_index--;
 
-    /* if top of stack is negative return early a success */
-    if (program->stack[program->stack_index] = 0)
+    /* if top of stack isn't a zero, return early without jumping */
+    if (!(program->stack[program->stack_index] == 0))
         return WS_SUCCESS;
-    
+
     /* loop through the label_indexes list */
     for (; i < program->label_count; i++)
     {
@@ -417,7 +417,7 @@ wsError wsi_jz(wsProgram *program)
             program->program_control[program->program_control_index] = program->label_indexes[i];
 
             /* return error success */
-            return WS_SUCCESS; 
+            return WS_SUCCESS;
         }
     }
 
@@ -436,10 +436,10 @@ wsError wsi_jn(wsProgram *program)
     /* pop the top element of the stack */
     program->stack_index--;
 
-    /* if top of stack is negative return early a success */
-    if (program->stack[program->stack_index - 1] < 0)
+    /* if top of stack isn't negative return early without jumping */
+    if (!(program->stack[program->stack_index - 1] < 0))
         return WS_SUCCESS;
-    
+
     /* loop through the label_indexes list */
     for (; i < program->label_count; i++)
     {
@@ -450,7 +450,7 @@ wsError wsi_jn(wsProgram *program)
             program->program_control[program->program_control_index] = program->label_indexes[i];
 
             /* return error success */
-            return WS_SUCCESS; 
+            return WS_SUCCESS;
         }
     }
 
@@ -508,12 +508,12 @@ wsError wsi_readc(wsProgram *program)
     char *key_str;
 
     /* check that there is atleast 1 element in the stack */
-    /* top element of stack specifies where in the heap the input is to reside */ 
+    /* top element of stack specifies where in the heap the input is to reside */
     if (program->stack_index < 1)
         return WS_ERR_TOOFEWITEMS;
 
     /* get input from stdin, and store it in a temporary variable */
-    scanf("%c", &value); 
+    scanf("%c", &value);
 
     /* get key_int from top of stack */
     key_int = program->stack[program->stack_index - 1];
@@ -521,10 +521,10 @@ wsError wsi_readc(wsProgram *program)
     /* allocate and convert int into key_string */
     key_str = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
     sprintf(key_str, "%d", key_int);
-    
+
     /* add pair to the heap */
     hash_set(program->heap, key_str, &value, sizeof(value));
-    
+
     /* exit gracefully */
     free (key_str);
     return WS_SUCCESS;
@@ -537,12 +537,12 @@ wsError wsi_readi(wsProgram *program)
     char *key_str;
 
     /* check that there is atleast 1 element in the stack */
-    /* top element of stack specifies where in the heap the input is to reside */ 
+    /* top element of stack specifies where in the heap the input is to reside */
     if (program->stack_index < 1)
         return WS_ERR_TOOFEWITEMS;
 
     /* get input from stdin, and store it in a temporary variable */
-    scanf("%d", &value); 
+    scanf("%d", &value);
 
     /* get key_int from top of stack */
     key_int = program->stack[program->stack_index - 1];
@@ -550,10 +550,10 @@ wsError wsi_readi(wsProgram *program)
     /* allocate and convert int into key_string */
     key_str = (char *)malloc((get_places(key_int, 10) + 1) * sizeof(char));
     sprintf(key_str, "%d", key_int);
-    
+
     /* add pair to the heap */
     hash_set(program->heap, key_str, &value, sizeof(value));
-    
+
     /* exit gracefully */
     free (key_str);
     return WS_SUCCESS;

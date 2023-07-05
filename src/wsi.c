@@ -4,21 +4,21 @@
     LeafWSI - a C based, cross-platform, whitespace language interpretter.
     Copyright (C) 2023  Sage I. Hendricks
 
-    LeafWSI is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
+    LeafWSI is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    LeafWSI is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+    LeafWSI is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License 
-    along with LeafWSI. If not, see <https://www.gnu.org/licenses/>. 
+    You should have received a copy of the GNU General Public License
+    along with LeafWSI. If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* 
+/*
     Contact Information:
     Email   sage.codes@email.com
     Github  sage-etcher
@@ -285,7 +285,7 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
             /* set global file possitioning to the start of error */
             g_char_pos = instruction_char_pos;
             g_line_pos = instruction_line_pos;
-           
+
             /* tell the loop to exit */
             runtime = false;
             continue;
@@ -327,7 +327,7 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
                 continue;
             }
 
-            /* check if item is a wsLabel, if so add the index to the 
+            /* check if item is a wsLabel, if so add the index to the
              * label_index list to quickly search for labels durring a jump */
             if (inst_check == WS_LABEL)
             {
@@ -377,19 +377,19 @@ static wsError interpret_file (char *file_contents, wsProgram *program)
             /* reset the instruction */
             instruction_count = 0;
             memset (instruction_str, 0, instruction_size * sizeof (instruction_str[0]));
-            
+
             /* stop checking for instruction_str having a match */
             break;
         }
     }
-    
+
 
     if (syntax_err_code != WS_SUCCESS)
     {
         log_error (syntax_err_code, "", g_line_pos, g_char_pos);
     }
 
-        
+
     /* exit gracefully */
     /* free unneeded memory */
     free (instruction_str);
@@ -402,35 +402,51 @@ static wsError run_program (wsProgram *program)
 {
     /* runtime error code */
     wsError runtime_err_code = WS_SUCCESS;
+    uint64_t *program_counter;
+
+    /* set the stack index to default value of 0 */
+    program->stack_index = 0;
 
     /* initiate the programs heap */
     program->heap = new_hashMap ();
     program->exit = false;
-    
+
     /* loop through instructions */
     program->program_control_index = 0;
     program->program_control[program->program_control_index] = 0;
 
-    for (; program->program_control[program->program_control_index] < program->inst_count; 
-           program->program_control[program->program_control_index]++)
+    /* loop through all of the program instructions */
+    do
     {
-        program->current_instruction = &program->instructions[program->program_control[program->program_control_index]];
+        /* make a pointer to the current executing location in the program */
+        program_counter = &program->program_control[program->program_control_index];
 
+        /* set current instrution pointer */
+        program->current_instruction = &program->instructions[*program_counter];
+
+        runtime_err_code = wsi_dprint (program);
+        printf ("%lu %lu, %s\n\n", program->program_control_index, *program_counter, WS_INST[program->current_instruction->instruction].inst_name);
+
+        /* run the current instruction's dedicated function */
         runtime_err_code = WS_INST[program->current_instruction->instruction].inst_function (program);
-
+        /* if the function runs poorly or sends an end command then exit the program */
         if (program->exit == true || runtime_err_code != WS_SUCCESS)
         {
             break;
         }
-        
-    }
 
-    
+        /* increment to the next instruction */
+        (*program_counter)++;
+    } /* check if we have processed all the instructions */
+    while (*program_counter < program->inst_count);
+
+    /* if there was an issue proccessing the code, throw an error */
     if (runtime_err_code != WS_SUCCESS)
     {
         log_error (runtime_err_code, WS_INST[runtime_err_code].inst_name, g_line_pos, g_char_pos);
     }
 
+    /* return the error code */
     return runtime_err_code;
 }
 
