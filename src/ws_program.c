@@ -123,7 +123,7 @@ wsError wsi_copy(wsProgram *program)
         return WS_ERR_FULLSTACK;
 
     /* get the index of the element we want to copy from the paramter */
-    copy_index = program->current_instruction->parameter;
+    copy_index = program->stack_index - program->current_instruction->parameter - 1;
 
     /* check if copy index is out of range */
     if (copy_index >= program->stack_index ||

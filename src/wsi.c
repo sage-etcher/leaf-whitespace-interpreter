@@ -184,12 +184,7 @@ static wsError get_parameter (char *file_contents, uint64_t *file_cursor, wsInt 
     } /* end while loop */
 
 
-    if (binary_string_count == 0)
-    {
-        err_code = WS_ERR_BADPARAM;
-    }
-
-    /* check that there was a value given */
+    /* if errorcode success then convert it normally*/
     if (err_code == WS_SUCCESS)
     {
         /* convert the string to binary and return the integer result */
@@ -424,15 +419,25 @@ static wsError run_program (wsProgram *program)
         /* set current instrution pointer */
         program->current_instruction = &program->instructions[*program_counter];
 
+        /* view each command ran */
+        /* printf ("%d %s", *program_counter, WS_INST[program->current_instruction->instruction].inst_name);
+        if (WS_INST[program->current_instruction->instruction].takes_parameter)
+            printf (" %d", program->current_instruction->parameter);
+        printf ("\n");
+        */ 
         /* run the current instruction's dedicated function */
         runtime_err_code = WS_INST[program->current_instruction->instruction].inst_function (program);
-
+        
+        /* view stack after command is ran */
+        /*runtime_err_code = wsi_dprint (program);
+        printf ("\n");
+        */
+        
         /* if the function runs poorly or sends an end command then exit the program */
         if (program->exit == true || runtime_err_code != WS_SUCCESS)
         {
             break;
         }
-
 
         /* increment to the next instruction */
         (*program_counter)++;
