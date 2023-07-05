@@ -46,6 +46,10 @@ typedef int64_t wsInt;
 /* max binary length 1-255*/
 #define MAX_PARAM_LEN 32
 
+
+/* enable more characters, WIP */
+/* #define SETLOCALE_LC_ALL */
+
 /* edit above this point */
 /* CONFIG STOP ediiting */
 

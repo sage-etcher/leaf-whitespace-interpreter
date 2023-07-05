@@ -45,6 +45,9 @@ Contact Information:
 #include <stdlib.h>
 #include <stdint.h>
 
+#include <wchar.h>
+#include <locale.h>
+
 
 /* constants */
 #define WS_MAX_INST_LEN 4
