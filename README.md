@@ -1,4 +1,4 @@
-# Leaf Whitespace Interpretter
+# Leaf Whitespace Interpretter (Nightly)
 A System independant interpretter for the [whitespace programming language](https://en.wikipedia.org/wiki/Whitespace_%28programming_language%29)
 
 LeafWSI is a C based interpretter for the esoteric programming language whitespace. The Interpretter takes in a whitespace file and executes the code in realtime. LeafWSI allows for customization of many key elements in how the program is interpretted and run. Customization can be done through the `src/config.h` file, some changes you can make include: custom stack length, recursion depth, the integer size in the stack/heap, how parameters are dealt with, and more!
@@ -26,7 +26,7 @@ make build
 sudo cp ./build/lwsi /usr/local/bin/
 ```
 
-# Precompiled Binaries
+## Precompiled Binaries
 
 If you would rather work with precompiled binaries over compiling from source, that is also an option. However, it is *not recomended* as you will be stuck using the default customization settings.
 
