@@ -40,6 +40,8 @@ Contact Information:
 #include <stdlib.h>
 #include <stdint.h>
 
+#include <wchar.h>
+#include <locale.h>
 
 /* globals */
 wsInstDefinition WS_INST[] =
@@ -468,8 +470,8 @@ wsError wsi_putc(wsProgram *program)
     /* guard clauses */
     if (program->stack_index <= 0)
         return WS_ERR_TOOFEWITEMS;
-
-    printf("%c", program->stack[program->stack_index - 1]);
+   
+    printf("%lc", program->stack[program->stack_index - 1]);
     program->stack_index--;
 
     return WS_SUCCESS;

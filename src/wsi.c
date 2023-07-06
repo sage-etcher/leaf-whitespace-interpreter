@@ -61,6 +61,11 @@ int main (int argc, char **argv)
 
     /* store error code */
     wsError error_code;
+    
+    /* enable more characters */
+    #ifdef SETLOCALE_LC_ALL
+        setlocale(LC_ALL, "");
+    #endif
 
     /* process console arguements, get file name */
     /* check that file console arguement was given */
