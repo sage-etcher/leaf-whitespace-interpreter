@@ -34,23 +34,46 @@ Contact Information:
 
 #include <stdint.h>
 
-/* CONFIG.H START editting */
-/* edit bellow this point */
 
-/* typedefinition for default int size for whitespace script */
+/* CONFIG.H START editting */
+/* edit BELLOW this point */
+
+/* --- General Config ------------------------------------------------------ */
+/* Sets the size of wsInt */
+/* Used durring runtime for the stack and heap aswell as for during first step
+ * interpretting for parameters */
 typedef int64_t wsInt;
 
-/* how many elements can be in the stack */
+
+/* --- Interpretter Constants ---------------------------------------------- */
+/* max character length of instruction commands, should match wsInt */
+/* ex1. if wsInt == int64_t; then MAX_PARAM_LEN = 64 */
+/* ex2. if wsInt == int32_t; then MAX_PARAM_LEN = 32 */
+#define MAX_PARAM_LEN 64 
+
+/* Strict instruction parameters */
+/* for maximum compatibility, defaults to false */
+/* true(1):  If an instruction takes a parameter, you must specify the 
+ * instruction. otherwise program will throw error on interprettation */
+/* false(0): If no parameter is given, assume 0 */
+#define STRICT_INSTRUCTION_PARAMETERS 0 
+
+
+/* --- Runtime Constantsd -------------------------------------------------- */
+/* Number of items allowed in the stack (stack depth) */
 #define STACK_LEN 255
 
-/* max binary length 1-255*/
-#define MAX_PARAM_LEN 32
+/* Size of the program->program_control array, how many times you can CALL a 
+ * label before you need to return */
+#define MAX_RECURSION_DEPTH 255
 
 
+/* --- WIP Character Locale Support ---------------------------------------- */
 /* enable more characters, WIP */
 #define SETLOCALE_LC_ALL
 
-/* edit above this point */
+
+/* edit ABOVE this point */
 /* CONFIG STOP ediiting */
 
 #endif
