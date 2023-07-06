@@ -1,31 +1,39 @@
 # LeafWSI
-A System independant interpretter for the whitespace programming language
+A System independant interpretter for the [whitespace programming language](https://en.wikipedia.org/wiki/Whitespace_%28programming_language%29)
 
-LeafWSI is a C based interpretter for the esoteric programming language whitespace. The Interpretter takes in a whitespace file and executes in realtime. Full customization of many key parts of the program, through the `src/config.h` file, allowing you to change the stacklength, max call depth, whitespace integer and more.
+LeafWSI is a C based interpretter for the esoteric programming language whitespace. The Interpretter takes in a whitespace file and executes the code in realtime. LeafWSI allows for customization of many key elements in how the program is interpretted and run. Customization can be done through the `src/config.h` file, some changes you can make include: custom stack length, recursion depth, the integer size in the stack/heap, how parameters are dealt with, and more!
+
+This Interpretter assumes atleast general knowledge of how to compiling programs from source, and (for customization through config.h) basic knowledge of the C programming language.
 
 # Builing & Installing the Interpretter
-Instructions on how to compile/build and install the program on various systems
+Instructions on how to compile/build and install the program on various systems. 
+
+*Note: In order for changes to config.h to take effect, the build dirrectory must be clean; only then can you recompile the Interpretter. The build dirrectory can be cleaned by running `make clean build` in replacement of `make build`. The build dirrectory only needs cleaned for recompilations, the following instructions are for first time builds.
 
 ## Windows (MinGW)
-Requires GNU GCC installed and added to Path
+Requires [MinGW](https://sourceforge.net/projects/mingw/files/) installed and added to Path
 ```
-mingw32-make -f makefiles\Makefile.mingw build
+copy .\makefiles\Makefile.mingw .\Makefile
+mingw32-make build
 copy build\lwsi.exe [destination path]\lwsi.exe
 ```
 
-
 ## *nix (Linux/Unix/BSD)
-Requires make (gmake on BSD) and a C compiler. If you don't want to use GCC you may have to specify `CC=[compiler]` and `LD=[linker]` when running make
+Requires make (gmake on BSD) and a C compiler. If you wish to use a compiler other than GCC, you may need to specify `CC=[compiler]` and `LD=[linker]` when running make
 ```
-make -f ./makefiles/makefile.linux build
+cp ./makefiles/Makefile.linux ./Makefile
+make build
 sudo cp ./build/lwsi /usr/local/bin/
 ```
 
 # Using the Interpretter
-The program must have been built, installed, and the installation dirrectory must be in the Path variable
+The interpretter must have been built, installed, and the installation dirrectory must be in the Path variable, in order to use it
+
+## Running a whitespace program
 ```
 lwsi [whitespace file]<cr>
 ```
+
 
 # File Descriptions
 | File Name | Description |
