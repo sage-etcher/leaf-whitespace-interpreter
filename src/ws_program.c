@@ -337,6 +337,9 @@ wsError wsi_label(wsProgram *program)
 wsError wsi_call(wsProgram *program)
 {
     uint64_t i = 0;
+    
+    if (program->program_control_index >= MAX_RECURSION_DEPTH)
+        return WS_ERR_MAXRECURSIONDEPTH;
 
     /* loop through the label_indexes list */
     for (; i < program->label_count; i++)

@@ -36,17 +36,18 @@ Contact Information:
 char *WS_ERRSTR[] =
 {
     "success",
-    "failure",
-    "stack is full",
-    "stack is empty",
+    "unknown failure.",
+    "syntax error. bad instruction",
+    "instruction takes parameter",
     "too few elements in stack",
     "index out of range",
-    "return from main processes",
+    "the stack is full. quickfix, increase MAX_STACK_LEN in the config file.",
+    "stack is empty",
+    "heap does not contain any items with that key",
+    "hit max recursion depth. quickfix, try increasing MAX_RECURSION_DEPTH in the config file"
+    "label not found. Are you sure it exists?",
+    "return without call",
     "end of file reached. no END statement (LLL)",
-    "bad instruction",
-    "couldn't find a match for that key",
-    "there was an issue getting the provided parameter",
-    "could not find the defined label"
 };
 
 

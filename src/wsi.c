@@ -189,6 +189,19 @@ static wsError get_parameter (char *file_contents, uint64_t *file_cursor, wsInt 
     } /* end while loop */
 
 
+    /* if strict instruction flag is enabled, log error when the 
+     * instruction_string_count is equal to 0.*/
+    #if STRICT_INSTRUCTION_PARAMETERS
+    
+    /* check if variable is 0 */
+    if (binary_string_count == 0)
+    {
+        /* set error code to BADPARAM */
+        err_code = WS_ERR_BADPARAM;
+    }
+
+    #endif 
+
     /* if errorcode success then convert it normally*/
     if (err_code == WS_SUCCESS)
     {

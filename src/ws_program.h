@@ -109,7 +109,7 @@ typedef struct
     uint64_t label_count;
 
     /* holds information on where in the instructions list we are durring runtime*/
-    uint64_t program_control[STACK_LEN];
+    uint64_t program_control[MAX_RECURSION_DEPTH];
     uint64_t program_control_index;
     /* holds a pointer to the current executing instruction */
     wsInstruction *current_instruction;
