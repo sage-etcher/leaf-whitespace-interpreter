@@ -32,11 +32,13 @@ Contact Information:
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+/* library for wsInt typedef */
 #include <stdint.h>
 
 
 /* CONFIG.H START editting */
 /* edit BELLOW this point */
+
 
 /* --- General Config ------------------------------------------------------ */
 /* Sets the size of wsInt */
