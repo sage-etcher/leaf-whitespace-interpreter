@@ -13,21 +13,21 @@ Instructions on how to compile/build and install the program on various systems.
 ## Windows (MinGW)
 Requires [MinGW](https://sourceforge.net/projects/mingw/files/) installed and added to Path
 
-### Building
-Builds the object files and executable in BUILD_DIR
+..* Building
+... Builds the object files and executable in BUILD_DIR
 
-```
+... ```
 copy .\makefiles\Makefile.mingw .\Makefile
 mingw32-make build
 ```
 
-### Installing (optional)
-Installs the program in INSTALL_DIR; default installation path `%appdata%/leaf-whitespace-interpretter/[version]`. 
+..* Installing (optional)
+... Installs the program in INSTALL_DIR; default installation path `%appdata%/leaf-whitespace-interpretter/[version]`. 
 
-Please note that this does **not** add the program to your PATH varibale; this must be done manually. Instructions can be found *[here](https://windowsloop.com/how-to-add-to-windows-path/)* if you require assistance.
+... Please note that this does **not** add the program to your PATH varibale; this must be done manually. Instructions can be found *[here](https://windowsloop.com/how-to-add-to-windows-path/)* if you require assistance.
 
 
-```
+... ```
 mingw32-make install
 ```
 
@@ -35,20 +35,20 @@ mingw32-make install
 ## *nix (Linux/Unix/BSD)
 Requires make (gmake on BSD) and a C compiler. 
 
-### Building
-If you are using a compiler other than GCC, you may need to specify `CC=[compiler]` and `LD=[linker]` building with make 
+..* Building
+... If you are using a compiler other than GCC, you may need to specify `CC=[compiler]` and `LD=[linker]` when building with make 
 
-```
+... ```
 cp ./makefiles/Makefile.linux ./Makefile
 make build
 ```
 
-### Installing (Optional)
-Installs the program in INSTALL_DIR; default installation path is `/usr/local/bin`.
+..* Installing (Optional)
+... Installs the program in INSTALL_DIR; default installation path is `/usr/local/bin`.
 
-as sudo 
+... as sudo 
 
-``` 
+... ``` 
 make install
 ```
 
