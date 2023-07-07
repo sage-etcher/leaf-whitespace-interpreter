@@ -71,7 +71,7 @@ wsInstDefinition WS_INST[] =
     { /*WS_PUTI,   */  "WS_PUTI",     "\t\n \t",   4,  false,  wsi_puti     },  /*  TLST     */
     { /*WS_READC,  */  "WS_READC",    "\t\n\t ",   4,  false,  wsi_readc    },  /*  TLTS     */
     { /*WS_READI,  */  "WS_READI",    "\t\n\t\t",  4,  false,  wsi_readi    },  /*  TLTT     */
-    { /*WS_DPRINT, */  "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   }   /*  TTL      */
+ /* { / *WS_DPRINT, * /  "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   } *//*  TTL      */
 };
 
 

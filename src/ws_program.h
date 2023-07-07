@@ -80,7 +80,7 @@ typedef enum
     WS_PUTI,
     WS_READC,
     WS_READI,
-    WS_DPRINT,
+  /*WS_DPRINT,*/
     WS_INST_COUNT
 } WS_INST_INDEX;
 
