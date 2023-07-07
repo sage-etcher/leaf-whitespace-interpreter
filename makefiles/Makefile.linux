@@ -13,7 +13,7 @@ OBJ_FILES := $(foreach file,$(SRC_FILES),$(BUILD_DIR)/$(file).o)
 INCLUDES := -I$(SRC_DIR)/include -I$(SRC_DIR)
 LIBRARIES := -L$(SRC_DIR)/lib
 
-BUILD_FLAGS := -std=c89 -pedantic $(INCLUDES)
+BUILD_FLAGS := -std=c89 -pedantic -O3 $(INCLUDES)
 LINKER_FLAGS := $(INCLUDES) $(LIBRARIES)
 
 CC := gcc
