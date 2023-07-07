@@ -72,8 +72,13 @@ typedef int64_t wsInt;
 
 /* --- WIP Character Locale Support ---------------------------------------- */
 /* enable more characters, WIP */
-#define SETLOCALE_LC_ALL
+#define SETLOCALE_LC_ALL 1
 
+/* prints each instruction to console before running it */
+#define DEBUG_PRINT_INSTRUCTION 0
+
+/* prints stack after each instruction is ran */
+#define DEBUG_PRINT_STACK 0
 
 /* edit ABOVE this point */
 /* CONFIG STOP ediiting */

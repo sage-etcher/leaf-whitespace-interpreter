@@ -62,8 +62,8 @@ int main (int argc, char **argv)
     /* store error code */
     wsError error_code;
     
-    /* enable more characters */
-    #ifdef SETLOCALE_LC_ALL
+    /* enable more characters if CONSTANT = 1 */
+    #if SETLOCALE_LC_ALL
         setlocale(LC_ALL, "");
     #endif
 
@@ -437,9 +437,27 @@ static wsError run_program (wsProgram *program)
         /* set current instrution pointer */
         program->current_instruction = &program->instructions[*program_counter];
 
+        /* print instruction, config file option */
+        #if DEBUG_PRINT_INSTRUCTION
+            /* print instruction */
+            printf ("%s", WS_INST[program->current_instruction->instruction].inst_name);
+            /* print parameter if instruction takes one */
+            if (WS_INST[program->current_instruction->instruction].takes_parameter)
+            {
+                printf (" %d", program->current_instruction->parameter);
+            }
+            /* print newline */
+            printf ("\n");
+        #endif
+
         /* run the current instruction's dedicated function */
         runtime_err_code = WS_INST[program->current_instruction->instruction].inst_function (program);
-        
+      
+        /* print stack, config file option */ 
+        #if DEBUG_PRINT_STACK
+            (void)wsi_dprint (program);
+        #endif
+
         /* if the function runs poorly or sends an end command then exit the program */
         if (program->exit == true || runtime_err_code != WS_SUCCESS)
         {
