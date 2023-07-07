@@ -1,9 +1,9 @@
-# Leaf Whitespace Interpretter
+# LeafWSI
 A System independant interpretter for the [whitespace programming language](https://en.wikipedia.org/wiki/Whitespace_%28programming_language%29)
 
 LeafWSI is a C based interpretter for the esoteric programming language whitespace. The Interpretter takes in a whitespace file and executes the code in realtime. LeafWSI allows for customization of many key elements in how the program is interpretted and run. Customization can be done through the `src/config.h` file, some changes you can make include: custom stack length, recursion depth, the integer size in the stack/heap, how parameters are dealt with, and more!
 
-This Interpretter assumes atleast general knowledge of how to compiling programs from source, and (for customization through config.h) basic knowledge of the C programming language.
+This Interpretter assumes atleast general knowledge of compiling programs from source, and (for customization through config.h) basic knowledge of the C programming language.
 
 # Builing & Installing the Interpretter
 Instructions on how to compile/build and install the program on various systems. 
@@ -12,26 +12,42 @@ Instructions on how to compile/build and install the program on various systems.
 
 ## Windows (MinGW)
 Requires [MinGW](https://sourceforge.net/projects/mingw/files/) installed and added to Path
+
+### Building
+Builds the object files and executable in BUILD_DIR
+  
 ```
 copy .\makefiles\Makefile.mingw .\Makefile
 mingw32-make build
-copy build\lwsi.exe [destination path]\lwsi.exe
+```
+
+### Installing (optional)
+Installs the program in INSTALL_DIR; default installation path `%appdata%/leaf-whitespace-interpretter/[version]`. 
+
+Please note that this does **not** add the program to your PATH varibale; this must be done manually. Instructions can be found *[here](https://windowsloop.com/how-to-add-to-windows-path/)* if you require assistance.
+
+```
+mingw32-make install
 ```
 
 ## *nix (Linux/Unix/BSD)
-Requires make (gmake on BSD) and a C compiler. If you wish to use a compiler other than GCC, you may need to specify `CC=[compiler]` and `LD=[linker]` when running make
+Requires make (gmake on BSD) and a C compiler. 
+
+### Building
+If you are using a compiler other than GCC, you may need to specify `CC=[compiler]` and `LD=[linker]` when building with make 
+
 ```
 cp ./makefiles/Makefile.linux ./Makefile
 make build
-sudo cp ./build/lwsi /usr/local/bin/
 ```
 
-## Precompiled Binaries
+### Installing
+Installs the program in INSTALL_DIR; default installation path is `/usr/local/bin`.
+as sudo 
 
-If you would rather work with precompiled binaries over compiling from source, that is also an option. However, it is *not recomended* as you will be stuck using the default customization settings.
-
-The Interpretter Binaries can be found *[here](https://github.com/sage-etcher/leaf-whitespace-interpretter/tree/binaries)*, if thats more up your alley.
-
+``` 
+make install
+```
 
 # Using the Interpretter
 The interpretter must have been built, installed, and the installation dirrectory must be in the Path variable, in order to use it
