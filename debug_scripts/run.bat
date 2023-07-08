@@ -1,1 +1,0 @@
-build\lwsi %~1
