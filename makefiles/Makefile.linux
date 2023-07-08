@@ -1,6 +1,6 @@
 TARGET_EXEC := lwsi
 
-VERSION := 23.7.6
+VERSION := 23.7.8
 
 BUILD_DIR := ./build
 SRC_DIR := ./src
