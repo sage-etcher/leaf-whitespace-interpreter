@@ -1,7 +1,10 @@
 TARGET_EXEC := lwsi
 
+VERSION := 23.7.8
+
 BUILD_DIR := ./build
 SRC_DIR := ./src
+DEST_DIR := /usr/local/bin/
 
 FILES := fileio.c utils.c ws_errors.c hashmap.c ws_program.c wsi.c
 SRC_FILES := $(addprefix $(SRC_DIR)/,$(FILES))
@@ -10,7 +13,7 @@ OBJ_FILES := $(foreach file,$(SRC_FILES),$(BUILD_DIR)/$(file).o)
 INCLUDES := -I$(SRC_DIR)/include -I$(SRC_DIR)
 LIBRARIES := -L$(SRC_DIR)/lib
 
-BUILD_FLAGS := -std=c89 -pedantic $(INCLUDES)
+BUILD_FLAGS := -std=c89 -pedantic -O3 $(INCLUDES)
 LINKER_FLAGS := $(INCLUDES) $(LIBRARIES)
 
 CC := gcc
@@ -27,6 +30,18 @@ $(BUILD_DIR)/$(TARGET_EXEC): $(OBJ_FILES)
 $(BUILD_DIR)/$(SRC_DIR)/%.c.o: $(SRC_DIR)/%.c
 	mkdir -pv "$(dir $@)"
 	$(CC) -c -o $@ $(BUILD_FLAGS) $<
+
+
+.PHONY: install
+install: 
+	mkdir -pv "$(DEST_DIR)"
+	cp "$(BUILD_DIR)/$(TARGET_EXEC)" "$(DEST_DIR)\"
+
+
+.PHONY: uninstall
+uninstall:
+	rm -f "$(DEST_DIR)\$(TARGET_EXEC)" 
+	echo Uninstalled Leaf Whitespace Interpretter
 
 
 .PHONY: clean

@@ -46,7 +46,7 @@ Contact Information:
 /* globals */
 wsInstDefinition WS_INST[] =
 {
-    /* index,      inst_name,     inst,       len  param   function         comment      */
+    /* index,          inst_name,     inst,       len  param   function         comment      */
     { /*WS_PUSH,   */  "WS_PUSH",     "  ",        2,  true,   wsi_push     },  /*  SS  N L  */
     { /*WS_DUP,    */  "WS_DUP",      " \n ",      3,  false,  wsi_dup      },  /*  SLS      */
     { /*WS_COPY,   */  "WS_COPY",     " \t ",      3,  true,   wsi_copy     },  /*  STS N L  */
@@ -71,7 +71,7 @@ wsInstDefinition WS_INST[] =
     { /*WS_PUTI,   */  "WS_PUTI",     "\t\n \t",   4,  false,  wsi_puti     },  /*  TLST     */
     { /*WS_READC,  */  "WS_READC",    "\t\n\t ",   4,  false,  wsi_readc    },  /*  TLTS     */
     { /*WS_READI,  */  "WS_READI",    "\t\n\t\t",  4,  false,  wsi_readi    },  /*  TLTT     */
-    { /*WS_DPRINT, */  "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   }   /*  TTL      */
+ /* { / *WS_DPRINT, * /  "WS_DPRINT",   "\t\t\n",    3,  false,  wsi_dprint   } *//*  TTL      */
 };
 
 
@@ -350,7 +350,7 @@ wsError wsi_call(wsProgram *program)
             /* increment program_control_index */
             program->program_control_index++;
             /* set new program_control at the instruction label index */
-            program->program_control[program->program_control_index] = program->label_indexes[i];
+            program->program_control[program->program_control_index] = program->label_indexes[i] + 1;
 
             /* return error success */
             return WS_SUCCESS;
@@ -463,7 +463,7 @@ wsError wsi_ret(wsProgram *program)
 
 wsError wsi_end(wsProgram *program)
 {
-    program->exit = false;
+    program->exit = true;
 
     return WS_SUCCESS;
 }

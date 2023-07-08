@@ -1,7 +1,10 @@
-TARGET_EXEC := lwsi
+TARGET_EXEC := lwsi.exe
+
+VERSION := 23.7.8
 
 BUILD_DIR := ./build
 SRC_DIR := ./src
+DEST_DIR := %appdata%\leaf-whitespace-interpretter\$(VERSION)
 
 FILES := fileio.c utils.c ws_errors.c hashmap.c ws_program.c wsi.c
 SRC_FILES := $(addprefix $(SRC_DIR)/,$(FILES))
@@ -10,7 +13,7 @@ OBJ_FILES := $(foreach file,$(SRC_FILES),$(BUILD_DIR)/$(file).o)
 INCLUDES := -I$(SRC_DIR)/include -I$(SRC_DIR)
 LIBRARIES := -L$(SRC_DIR)/lib
 
-BUILD_FLAGS := -std=c89 -pedantic $(INCLUDES)
+BUILD_FLAGS := -std=c89 -pedantic -O3 $(INCLUDES)
 LINKER_FLAGS := $(INCLUDES) $(LIBRARIES)
 
 CC := gcc
@@ -21,15 +24,29 @@ LD := gcc
 build: $(BUILD_DIR)/$(TARGET_EXEC)
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJ_FILES)
-	if not exist "$(dir $@)" mkdir "$(dir $@)"
+	@if not exist "$(dir $@)" mkdir "$(dir $@)"
 	$(LD) -o $@ $(LINKER_FLAGS) $(OBJ_FILES)
 
 $(BUILD_DIR)/$(SRC_DIR)/%.c.o: $(SRC_DIR)/%.c
-	if not exist "$(dir $@)" mkdir "$(dir $@)"
+	@if not exist "$(dir $@)" mkdir "$(dir $@)"
 	$(CC) -c -o $@ $(BUILD_FLAGS) $<
+
+
+.PHONY: install
+install: 
+	@if not exist "$(DEST_DIR)" mkdir "$(DEST_DIR)"
+	copy "$(subst /,\,$(BUILD_DIR)/$(TARGET_EXEC))" "$(DEST_DIR)\$(TARGET_EXEC)"
+	@echo.
+	@echo installation Path: "$(DEST_DIR)"
+	@echo dont forget to manually add the installation path to your Path Eviornmental variable
+
+
+.PHONY: uninstall
+uninstall:
+	@if exist "$(DEST_DIR)\$(TARGET_EXEC)" del /s /q "$(DEST_DIR)\$(TARGET_EXEC)" 
+	@echo Uninstalled Leaf Whitespace Interpretter
 
 
 .PHONY: clean
 clean:
-	del /s /q "$(BUILD_DIR)"
-	rmdir /s /q "$(BUILD_DIR)"
+	@if exist "$(BUILD_DIR)" del /s /q "$(BUILD_DIR)" & rmdir /s /q "$(BUILD_DIR)"
