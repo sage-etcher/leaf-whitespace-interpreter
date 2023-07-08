@@ -134,21 +134,25 @@ static wsError get_parameter (char *file_contents, uint64_t *file_cursor, wsInt 
     char binary_string[MAX_PARAM_LEN];
     const int8_t binary_string_len = MAX_PARAM_LEN;
     int8_t binary_string_count = 0;
-    wsError err_code = WS_SUCCESS;
+	wsError err_code = WS_SUCCESS;
+	bool param_runtime = true;
 
     /* set binary string as all zeroes */
     memset (binary_string, 0, binary_string_len * sizeof (binary_string[0]));
 
-    /* set current_char */
-    current_char = file_contents[*file_cursor];
-
     /* loop through characters until you get to end of file or end of number */
-    while (current_char != '\n')
+    while (param_runtime)
     {
         /* set current_char */
         current_char = file_contents[*file_cursor];
         /* increment program counter */
         (*file_cursor)++;
+
+		if (current_char == '\n')
+		{
+			param_runtime = false;
+			continue;
+		}
 
         /* get line number and char in line for error logging */
         inc_cursor_position (current_char);
@@ -156,7 +160,8 @@ static wsError get_parameter (char *file_contents, uint64_t *file_cursor, wsInt 
         if (current_char == '\0')
         {
             err_code = WS_ERR_BADPARAM;
-            break;
+			param_runtime = false;
+			continue;
         }
 
         /* if not white space return to top of loop */
@@ -172,7 +177,8 @@ static wsError get_parameter (char *file_contents, uint64_t *file_cursor, wsInt 
         /* if string count is longer than string len return */
         if (binary_string_count >= binary_string_len)
         {
-            break;
+			param_runtime = false;
+			continue;
         }
 
         /* if space, add a 0, if a tab add a 1 */
