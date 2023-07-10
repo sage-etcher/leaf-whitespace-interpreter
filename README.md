@@ -1,10 +1,10 @@
-# Leaf Whitespace Interpretter (Nightly)
+# Leaf Whitespace Interpreter (Nightly)
 
-The nightly branch of the leaf whitespace interpretter. This is the quickest updated branch, however at the cost of stability. Some updates may not run, or may not run correctly, this branch is for development updates and for those that want the bleeding edge up to date version of the software. 
+The nightly branch of the leaf whitespace interpreter. This is the quickest updated branch, however at the cost of stability. Some updates may not run, or may not run correctly, this branch is for development updates and for those that want the bleeding edge up to date version of the software. 
 
-For the *majority* of people the [Stable branch](https://github.com/sage-etcher/leaf-whitespace-interpretter/tree/stable-dev) is recommended. 
+For the *majority* of people the [Stable branch](https://github.com/sage-etcher/leaf-whitespace-interpreter/tree/stable-dev) is recommended. 
 
-For those that don't want to compile the program themselves, their is also a [Binary branch](https://github.com/sage-etcher/leaf-whitespace-interpretter/tree/binaries), which may or may or may not be up to date with the current nightly version.
+For those that don't want to compile the program themselves, their is also a [Binary branch](https://github.com/sage-etcher/leaf-whitespace-interpreter/tree/binaries), which may or may or may not be up to date with the current nightly version.
 
 
 # File Descriptions
