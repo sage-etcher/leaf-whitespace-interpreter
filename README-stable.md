@@ -1,14 +1,14 @@
-# Leaf Whitspace Interpretter
-A System independant interpretter for the [whitespace programming language](https://en.wikipedia.org/wiki/Whitespace_%28programming_language%29)
+# Leaf Whitspace Interpreter
+A System independant interpreter for the [whitespace programming language](https://en.wikipedia.org/wiki/Whitespace_%28programming_language%29)
 
-LeafWSI is a C based interpretter for the esoteric programming language whitespace. The Interpretter takes in a whitespace file and executes the code in realtime. LeafWSI allows for customization of many key elements in how the program is interpretted and run. Customization can be done through the `src/config.h` file, some changes you can make include: custom stack length, recursion depth, the integer size in the stack/heap, how parameters are dealt with, and more!
+LeafWSI is a C based interpreter for the esoteric programming language whitespace. The Interpreter takes in a whitespace file and executes the code in realtime. LeafWSI allows for customization of many key elements in how the program is interpreted and run. Customization can be done through the `src/config.h` file, some changes you can make include: custom stack length, recursion depth, the integer size in the stack/heap, how parameters are dealt with, and more!
 
-This Interpretter assumes atleast general knowledge of compiling programs from source, and (for customization through config.h) basic knowledge of the C programming language.
+This Interpreter assumes atleast general knowledge of compiling programs from source, and (for customization through config.h) basic knowledge of the C programming language.
 
-# Builing & Installing the Interpretter
+# Builing & Installing the Interpreter
 Instructions on how to compile/build and install the program on various systems. 
 
-*Note: In order for changes to config.h to take effect, the build dirrectory must be clean; only then can you recompile the Interpretter. The build dirrectory can be cleaned by running `make clean build` in replacement of `make build`. The build dirrectory only needs cleaned for recompilations, the following instructions are for first time builds.
+*Note: In order for changes to config.h to take effect, the build dirrectory must be clean; only then can you recompile the Interpreter. The build dirrectory can be cleaned by running `make clean build` in replacement of `make build`. The build dirrectory only needs cleaned for recompilations, the following instructions are for first time builds.
 
 ## Windows (MinGW)
 Requires [MinGW](https://sourceforge.net/projects/mingw/files/) installed and added to Path
@@ -22,7 +22,7 @@ mingw32-make build
 ```
 
 ### Installing (optional)
-Installs the program in INSTALL_DIR; default installation path `%appdata%/leaf-whitespace-interpretter/[version]`. 
+Installs the program in INSTALL_DIR; default installation path `%appdata%/leaf-whitespace-interpreter/[version]`. 
 
 Please note that this does **not** add the program to your PATH varibale; this must be done manually. Instructions can be found *[here](https://windowsloop.com/how-to-add-to-windows-path/)* if you require assistance.
 
@@ -49,8 +49,8 @@ as sudo
 make install
 ```
 
-# Using the Interpretter
-The interpretter must have been built, installed, and the installation dirrectory must be in the Path variable, in order to use it
+# Using the Interpreter
+The interpreter must have been built, installed, and the installation dirrectory must be in the Path variable, in order to use it
 
 ## Running a whitespace program
 ```
