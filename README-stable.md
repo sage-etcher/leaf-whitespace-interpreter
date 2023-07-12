@@ -50,7 +50,7 @@ make install
 ```
 
 # Binary Releases
-If you prefer pre-compiled binaries you can find them *[here](https://github.com/sage-etcher/leaf-whitespace-interpreter/releases/tag/v1.0.0)*. However, please note that the binaries offer less customizability.
+If you prefer pre-compiled binaries you can find them *[here](https://github.com/sage-etcher/leaf-whitespace-interpreter/releases/tag/v1.0.1)*. However, please note that the binaries offer less customizability.
 
 # Using the Interpreter
 The interpreter must have been built, installed, and the installation dirrectory must be in the Path variable, in order to use it
